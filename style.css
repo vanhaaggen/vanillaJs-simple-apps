@@ -1,0 +1,257 @@
+/*»»»»»»...CSS-RESET...««««««*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,h2,h3,h4,p {
+    margin: 0
+}
+
+li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+body {
+    min-height: 100vh;
+    scroll-behavior: smooth;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5; 
+}
+/*-------------------------------*/
+:root{
+    --background-js: #f7e018;
+    --color-js: #141414;
+    --color-add-bttn:  #6bdc52;
+    --color-error-bttn: red;
+    --color-main-elements: #f5f5f5;
+    --color-second-elements: #eae8e8;
+    --color-border-grey: #999797;
+    --font-roboto: 'Roboto', sans-serif;
+    --font-open-sans: 'Open Sans', sans-serif
+}
+/*---------general---------------*/
+ul,
+.main-container, 
+.container-left,
+.input-container,
+.input-n-bttn,
+.bttn,
+.item,
+.item-top,
+.item-bottom,
+.title,
+.title-language{
+    display: flex
+}
+
+/*--------Commons----------------*/
+.title-language--italic,
+.title-lang-frame,
+.container-right{
+    font-family: var(--font-open-sans);
+}
+
+.main-container{
+    width: 100%;
+}
+
+/*---------left-CONTAINER------------------*/
+/*-----------------------------------------*/
+ul{
+    flex-direction: column;
+}
+
+li{
+    cursor: pointer;
+    padding: 0 1rem .5rem 0
+}
+.container-left{
+    align-items: center;
+    flex-direction: column;
+    width: 350px;
+    height: 100vh;
+    min-width: 150px;
+    background: var(--background-js); 
+    color:var(--color-js)
+}
+
+.title{
+    flex-direction: column;
+    height: 128px;
+    border: 2px solid var(--color-main-elements);
+    
+}
+.title-language{
+    justify-content: flex-end;
+}
+
+.title-language--italic{
+    font-size: 1.5rem;
+    padding-right: .2rem;
+    font-style: italic;
+}
+.title-language--black{
+    text-align: right;
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: var(--font-roboto);
+}
+.title-lang-frame{
+    font-size: 2rem;
+    border: 2px solid var(--color-main-elements);
+    background: var(--color-main-elements);
+    padding: .5rem;
+
+}
+.title, .input-container{ 
+    margin-top: 2rem 
+}
+
+
+
+
+
+
+
+
+/*--------------------------------*/
+/*---------TODO APP---------------*/
+.container-right{
+    width: 80%;
+    flex-direction: column;
+    padding-left: 1.5rem;
+}
+
+.input-container{
+    width: 45%;
+    min-width: 20rem;
+    padding-bottom: 1rem;
+    flex-direction: column;
+    border-bottom: 1px dashed var(--color-border-grey)
+}
+
+.input__description{
+    width: 300px;
+    height: 25px;
+    border: 1px solid;
+    border-radius: 3px;
+    margin-right: 1rem;
+}
+
+.bttn{
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    width: 1.8rem;
+    height: 1.5rem;   
+}
+
+.input__bttn{
+    border-radius: 3px;
+    border: 1px solid var(--color-add-bttn);
+}
+
+.item__delete{
+    cursor: pointer;
+    border-radius: 3px;
+    border: 1px solid var(--color-error-bttn)
+}
+
+.ion-icon-close{
+    color: var(--color-error-bttn);
+    transition: .2s
+}
+
+.ion-icon-close:hover{
+    color: white;
+    transform: rotate(180deg)
+}
+
+.ion-icon-add{
+    color: var(--color-add-bttn);
+}
+
+.input__bttn:hover, 
+.ion-icon-add:hover{
+    background: var(--color-add-bttn);
+    border: none;
+    border-radius: 3px;
+    color: white
+}
+
+.item__delete:hover{
+    background: var(--color-error-bttn);
+    border: none;
+    border-radius: 3px;   
+}
+
+.item__delete:active,
+.input__bttn:active{
+    transform: translateY(2px)
+}
+
+.container {
+    min-width: 300px;
+    width: 45%    
+}
+
+.item{
+    flex-direction: column;
+    border-radius: 4px;
+    margin: 1rem 0;
+    background: var(--color-main-elements)
+    
+}
+.task__date{
+    font-style: italic;
+}
+
+.id,
+.task__date{
+    color: var(--color-border-grey)
+}
+
+.item-top{
+    justify-content: space-between;
+    padding: 0 .5rem;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    background: var(--color-second-elements)
+}
+
+.item-bottom{
+    padding: .5rem;
+    justify-content: space-between;
+    font-size: 1.2rem; 
+}
+
+ion-icon{
+    font-size: 1.5rem;
+}
+@media(max-width: 500px){
+    ul{
+        flex-direction: row;
+    }
+    .title{
+        justify-content: center;
+        margin: 2rem
+    }
+    .main-container{
+        flex-wrap: wrap;
+    }
+    .container-left{
+        position: relative;
+        height: 100%;
+        width: 100%
+    }
+    .container-right{
+        width: 100%;
+    }
+
+}
