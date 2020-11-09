@@ -5,7 +5,6 @@ const todoCtrl = (() => {
         this.date = date
     }
 
-
     const data = {
         taskItems: []
     }
@@ -48,7 +47,7 @@ const todoCtrl = (() => {
     }
 })()
 
-const UICtrl = (() => {
+const todoUICtrl = (() => {
     const DOM_STRINGS = {
         addDescription: ".input__description",
         addBttn: ".input__bttn",
@@ -142,7 +141,7 @@ const UICtrl = (() => {
 })()
 
 define(() => {
-    const DOM = UICtrl.getDOMstrings()
+    const DOM = todoUICtrl.getDOMstrings()
     const setupEventListener = () => {
 
         document.querySelector(DOM.addBttn).addEventListener('click', ctrlAddTask)
@@ -152,14 +151,14 @@ define(() => {
     }
 
     const ctrlAddTask = () => {
-        let input = UICtrl.getInput()
+        let input = todoUICtrl.getInput()
 
         if (input.description !== "") {
             let newTask = todoCtrl.addTask(input.description)
 
-            UICtrl.addListItem(newTask)
+            todoUICtrl.addListItem(newTask)
 
-            UICtrl.clearInputField()
+            todoUICtrl.clearInputField()
         }
 
     }
@@ -171,7 +170,7 @@ define(() => {
         if (taskID) {
             ID = taskID * 1
             todoCtrl.deleteTask(ID)
-            UICtrl.deleteListItem(taskID)
+            todoUICtrl.deleteListItem(taskID)
         }
     }
 
@@ -179,7 +178,7 @@ define(() => {
         init: () => {
             console.log('App has started.')
             document.getElementById(DOM.root).innerHTML = ""
-            UICtrl.loadView()
+            todoUICtrl.loadView()
             setupEventListener()
         }
     }

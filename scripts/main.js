@@ -12,7 +12,6 @@ require([
             calendar: 'calendar'
         }
 
-
         document.getElementById(DOM_STRINGS.todo).addEventListener('click', () => todoApp.init())
         document.getElementById(DOM_STRINGS.register).addEventListener('click', () => registerApp.init())
         document.getElementById(DOM_STRINGS.card).addEventListener('click', () => cardApp.init())
