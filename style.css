@@ -340,8 +340,12 @@ ion-icon{
     background: #50e3c3
   }
   
-  .state-active{
+  .active{
     background: #50e3c3
+  }
+
+  .distance{
+      background: #94fde6
   }
 
 
