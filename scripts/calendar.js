@@ -3,10 +3,8 @@ const CALENDAR_HTML = `
 <div class="search-container">
     <div class="search">
         <form class="form">
-            <input class="search-box" type="text" name="Check-in" id="checkin" size="12" readonly="readonly"
-                placeholder="Check-in" value>
-            <input class="search-box" type="text" name="Check-out" id="checkout" size="12" readonly="readonly"
-                placeholder="Check-out" value>
+            <input class="search-box" type="text" name="Check-in" id="checkin" size="12" placeholder="Check-in" value>
+            <input class="search-box" type="text" name="Check-out" id="checkout" size="12" placeholder="Check-out" value>
             <select name="NumberOfPeople" class="search-box">
                 <option>1</option>
                 <option selected="selected">2</option>
@@ -20,10 +18,14 @@ const CALENDAR_HTML = `
 
 <div class="calendar">
     <div class="calendar__info">
-        <div class="calendar__prev" id="prev-month">&#9664;</div>
+        <div class="calendar__prev btn-click-fx" id="prev-month">
+            <ion-icon class="calendar__nav-btn" name="caret-back-outline"></ion-icon>
+        </div>
         <div class="calendar__month" id="month"></div>
         <div class="calendar__year" id="year"></div>
-        <div class="calendar__next" id="next-month">&#9654;</div>
+        <div class="calendar__next btn-click-fx" id="next-month">
+            <ion-icon class="calendar__nav-btn" name="caret-forward-outline"></ion-icon>
+        </div>
     </div>
 
     <div class="calendar__week">
@@ -37,7 +39,14 @@ const CALENDAR_HTML = `
     </div>
 
     <div class="calendar__dates" id="dates"></div>
+</div>
 
+<div class="github-link-container">
+    <a class="github-link" 
+        href="https://github.com/vanhaaggen/vanillaJs-simple-apps/blob/master/scripts/calendar.js"
+        target="_blank"
+    > code is on github <span>&nbsp;</span> <ion-icon name="logo-github">ion-icon>
+    </a>
 </div>`
 
 
@@ -154,7 +163,7 @@ const calendarUICtrl = (calendCtrl => {
             let datesElement = document.getElementById(DOMstrings.dates)
             let firstOfMonth = calendCtrl.firstOfMonth(DATE.month, DATE.year)
             let totalMonthDays = calendCtrl.getTotalDays()
-
+            console.log(firstOfMonth)
             for (let i = firstOfMonth; i > 0; i--) {
                 let lastDays = (totalMonthDays - 1) - (i - 1)
 

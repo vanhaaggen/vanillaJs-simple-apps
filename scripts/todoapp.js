@@ -1,3 +1,46 @@
+const TODO_HTML = `<div class="input-container">
+            <h1>Todo App</h1>
+            <label for="task">Add your task</label>
+            <div class="input-n-bttn">
+                <input class="input__description" type="text" name="task" id="task">
+                <div class="btn-todo input__bttn btn-click-fx">
+                    <ion-icon class="ion-icon-add" name="add-sharp"></ion-icon>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="task__list">
+
+                <div class="item" id="test">
+                    <div class="item-top">
+                        <div class="id">Example task</div>
+                        <div class="task__date">07/11/2020 10:57</div>
+                    </div>
+
+                    <div class="item-bottom">
+                        <div class="task__description">Do Homework</div>
+                        <div>
+                            <div class="btn-todo item__delete btn-click-fx">
+                                <ion-icon class="ion-icon-close" name="close-sharp"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="github-link-container">
+            <a 
+                class="github-link" 
+                href="https://github.com/vanhaaggen/vanillaJs-simple-apps/blob/master/scripts/todoapp.js"
+                target="_blank"
+            > code is on github <span>&nbsp;</span> <ion-icon name="logo-github">ion-icon>
+            </a>
+        </div>`
+
+
+
 const todoCtrl = (() => {
     const Task = function (id, description, date) {
         this.id = id
@@ -73,7 +116,7 @@ const todoUICtrl = (() => {
                 </div>
                 <div class="item-bottom">
                     <div class="task__description">${obj.description}</div>
-                    <div class="bttn item__delete">
+                    <div class="btn-todo item__delete btn-click-fx">
                     <ion-icon class="ion-icon-close" name="close-sharp"></ion-icon>
                     </div>
                 </div>
@@ -95,42 +138,8 @@ const todoUICtrl = (() => {
 
         loadView: () => {
             const root = document.getElementById(DOM_STRINGS.root)
-            const HTML = `<div class="input-container">
-            <h1>Todo App</h1>
-            <label for="task">Add your task</label>
-            <div class="input-n-bttn">
-                <input class="input__description" type="text" name="task" id="task">
-                <div class="bttn input__bttn">
-                    <ion-icon class="ion-icon-add" name="add-sharp"></ion-icon>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="task__list">
-
-                <div class="item" id="test">
-                    <div class="item-top">
-                        <div class="id">Example task</div>
-                        <div class="task__date">07/11/2020 10:57</div>
-                    </div>
-
-                    <div class="item-bottom">
-                        <div class="task__description">Do Homework</div>
-                        <div>
-                            <div class="bttn item__delete">
-                                <ion-icon class="ion-icon-close" name="close-sharp"></ion-icon>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>`
-            const hydrate = root.insertAdjacentHTML('beforeend', HTML)
-
+            const hydrate = root.insertAdjacentHTML('beforeend', TODO_HTML)
             return hydrate
-
         },
 
         getDOMstrings: () => {

@@ -15,6 +15,7 @@ li{
 
 a{
     text-decoration: none;
+    color:  #999797
 }
 
 body {
@@ -41,7 +42,7 @@ ul,
 .container-left,
 .input-container,
 .input-n-bttn,
-.bttn,
+.btn-todo,
 .item,
 .item-top,
 .item-bottom,
@@ -67,11 +68,36 @@ ul,
     flex-direction: column;
     padding-left: 1rem;
 }
+
+.btn-click-fx:active,
+.github-link:active { 
+    transform: translateY(2px) 
+}
+
+.github-link-container{
+    margin-top: 1rem;
+    width: 160px;
+    color: #b4b3b3;
+    font-size: small;
+} 
+.github-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #cccbcb;
+    border-radius: 15px
+}
+
+.github-link:hover {
+    cursor: pointer;
+    color: #d4ebe7;
+    background: #b4b3b3
+}
+
 /*---------left-CONTAINER------------------*/
 /*-----------------------------------------*/
-ul{
-    flex-direction: column;
-}
+ul { flex-direction: column; }
 
 li{
     cursor: pointer;
@@ -90,12 +116,10 @@ li{
 .title{
     flex-direction: column;
     height: 128px;
-    border: 2px solid var(--color-main-elements);
-    
+    border: 2px solid var(--color-main-elements);   
 }
-.title-language{
-    justify-content: flex-end;
-}
+
+.title-language { justify-content: flex-end; }
 
 .title-language--italic{
     font-size: 1.5rem;
@@ -120,12 +144,6 @@ li{
 }
 
 
-
-
-
-
-
-
 /*--------------------------------*/
 /*---------TODO APP---------------*/
 
@@ -145,7 +163,7 @@ li{
     margin-right: 1rem;
 }
 
-.bttn{
+.btn-todo{
     cursor: pointer;
     justify-content: center;
     align-items: center;
@@ -190,11 +208,6 @@ li{
     background: var(--color-error-bttn);
     border: none;
     border-radius: 3px;   
-}
-
-.item__delete:active,
-.input__bttn:active{
-    transform: translateY(2px)
 }
 
 .container {
@@ -273,8 +286,7 @@ ion-icon{
   }
   .calendar__prev, .calendar__next {
     color: #444;
-    cursor: pointer;
-    font-size: 1.3em; 
+    cursor: pointer; 
   }
   .calendar__prev {
     margin-right: auto; 
@@ -282,6 +294,14 @@ ion-icon{
   .calendar__next {
     margin-left: auto; 
   }
+
+  .calendar__nav-btn{
+      font-size: 1.8rem;
+  }
+  .calendar__nav-btn:hover{
+      color: #676868
+  }
+
   .calendar__week, .calendar__dates {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -347,7 +367,6 @@ ion-icon{
   .distance{
       background: #94fde6
   }
-
 
 
   @media(max-width: 1024px){
