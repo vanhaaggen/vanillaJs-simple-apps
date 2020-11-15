@@ -112,8 +112,7 @@ define(() => {
     }
 
     return {
-        getTemplate: (templ) => {
-            return template[`${templ}`]
-        }
+        getTemplate: templ => template[`${templ}`]
+
     }
 })
