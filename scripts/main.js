@@ -1,9 +1,10 @@
 
 require([
+    "templates",
     "todoapp",
     "register",
     "card",
-    "calendar"], (todoApp, registerApp, cardApp, calendarApp) => {
+    "calendar"], (view, todoApp, registerApp, cardApp, calendarApp) => {
 
         const DOM_STRINGS = {
             todo: 'todo',
@@ -11,10 +12,15 @@ require([
             card: 'card',
             calendar: 'calendar'
         }
+        const todoTemplate = view.getTemplate('todoapp')
+        const registerTemplate = view.getTemplate('register')
+        const cardTemplate = view.getTemplate('card')
+        const calendarTemplate = view.getTemplate('calendar')
 
-        document.getElementById(DOM_STRINGS.todo).addEventListener('click', () => todoApp.init())
-        // document.getElementById(DOM_STRINGS.register).addEventListener('click', () => registerApp.init())
-        // document.getElementById(DOM_STRINGS.card).addEventListener('click', () => cardApp.init())
-        document.getElementById(DOM_STRINGS.calendar).addEventListener('click', () => calendarApp.init())
+
+        document.getElementById(DOM_STRINGS.todo).addEventListener('click', () => todoApp.init(todoTemplate))
+        document.getElementById(DOM_STRINGS.register).addEventListener('click', () => registerApp.init(registerTemplate))
+        document.getElementById(DOM_STRINGS.card).addEventListener('click', () => cardApp.init(cardTemplate))
+        document.getElementById(DOM_STRINGS.calendar).addEventListener('click', () => calendarApp.init(calendarTemplate))
 
     })

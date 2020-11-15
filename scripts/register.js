@@ -1,13 +1,12 @@
 define(() => {
-    const loadView = () => {
-        const html = `<h1>Register Form App</h1>`
-        const hydrate = document.getElementById('root').insertAdjacentHTML("beforeend", html)
+    const loadView = (view) => {
+        const hydrate = document.getElementById('root').insertAdjacentHTML("beforeend", view)
         return hydrate
     }
     return {
-        init: () => {
+        init: (view) => {
             document.getElementById('root').innerHTML = ""
-            loadView()
+            loadView(view)
         },
         test: () => {
             console.log('Clicked on RegisterApp')
