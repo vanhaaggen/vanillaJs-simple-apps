@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-body,h2,h3,h4,p {
+body,h2,h4,p {
     margin: 0
 }
 
@@ -261,7 +261,11 @@ ion-icon{
     align-items: center;
   } */
   
-  
+  .calendar__top-p-element{
+      margin-bottom: 1rem;
+      color: #000000a4;
+      font-weight: 600;
+  }
   .calendar {
     background: #fcfcfc;
     border-radius: 5px;
@@ -340,7 +344,7 @@ ion-icon{
     min-width: 350px;
     max-width: 450px;
     height: 3rem;
-    background: rgba(0, 0, 0, 0.644);
+    background: #000000a4;
     border-radius: 5px
   }
   

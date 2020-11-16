@@ -62,7 +62,8 @@ define(() => {
 
         calendar: `
         <h1>Calendar Booking App</h1>
-
+        
+        <p class="calendar__top-p-element">Select your dates:</p>
         <div class="calendar">
             <div class="calendar__info">
                 <div class="calendar__prev btn-click-fx" id="prev-month">

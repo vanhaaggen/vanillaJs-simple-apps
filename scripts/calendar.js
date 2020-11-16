@@ -11,13 +11,13 @@ const calendarCtrl = (() => {
     }
 
     const data = {
-        element: [],
         clicks: 0,
         checkIn: 0,
         checkOut: 0,
         people: 0,
         totalDays: 0,
     }
+
 
     const isLeapYear = () => ((DATE.year % 100 !== 0) && (DATE.year % 4 === 0) || (DATE.year % 400 === 0))
 
@@ -164,8 +164,9 @@ const calendarUICtrl = (calendCtrl => {
          * @param {String} elID (ID of the element)
          * @param {Object} dataObj (Data object stored in calendarCtrl)
          */
-        showCheckinCheckout: (elID, dataObj) => {
-            document.getElementById(elID).value = dataObj
+        displayInputValue: () => {
+            document.getElementById(DOMstrings.checkinEl).value = data.checkIn
+            document.getElementById(DOMstrings.checkoutEl).value = data.checkOut
         },
         /**
          * It changes the value of a type=text input form to empty string
@@ -239,18 +240,53 @@ const calendarUICtrl = (calendCtrl => {
                 this.clearCheckinCheckout()) : data.clicks
 
             if (data.clicks == 0) {
+                window._in = `${y}/${m + 1}/${d}`
                 data.checkIn = `${d}/${m + 1}/${y}`
                 data.clicks++
-                this.showCheckinCheckout(DOMstrings.checkinEl, data.checkIn)
+
             } else if (data.clicks == 1) {
+                window._out = `${y}/${m + 1}/${d}`
                 data.checkOut = `${d}/${m + 1}/${y}`
                 data.clicks++
-                this.showCheckinCheckout(DOMstrings.checkoutEl, data.checkOut)
                 data.totalDays = calendarCtrl.totalDaysBetweenDates(data.checkIn, data.checkOut)
+                this.sortDateAndDisplay()
             }
 
             console.log(data)
         },
+        /**
+         * It finds the greatest of two dates, and re-orders the data object if necessary.
+         * **Disclaimer: Try not to use the window obj to store global data**
+         * 
+         * @param {string} date1
+         * @param {string} date2
+         * 
+         */
+        sortDateAndDisplay: () => {
+            let _in = window._in
+            let _out = window._out
+
+            if ((_in && _out) && (_in > _out)) {
+                let temp
+                dtIn = new Date(_in)
+                dtOut = new Date(_out)
+
+                temp = data.checkIn
+                data.checkIn = data.checkOut
+                data.checkOut = temp
+
+                calendarUICtrl.displayInputValue()
+
+                delete window._in
+                delete window._out
+
+            } else {
+                calendarUICtrl.displayInputValue()
+            }
+        },
+        /**
+         * Inserts a Node element
+         */
         displayResults: () => {
             const parentEl = document.getElementById(DOMstrings.result)
             const numOfpeople = document.getElementById(DOMstrings.searchBox).value
