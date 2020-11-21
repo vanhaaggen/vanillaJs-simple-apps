@@ -1,4 +1,5 @@
 const calendarCtrl = (() => {
+    let PRICE = 75
     let now = new Date()
 
     const DATE = {
@@ -10,12 +11,16 @@ const calendarCtrl = (() => {
         currentYear: now.getFullYear(),
     }
 
+    window.__userData__ = {}
+
     const data = {
+        id: 0,
         clicks: 0,
         checkIn: 0,
         checkOut: 0,
         people: 0,
         totalDays: 0,
+        totalPrice: 0
     }
 
 
@@ -79,7 +84,17 @@ const calendarCtrl = (() => {
                     obj[val] = 0
                 }
             }
-            delete window.bookingData
+            delete window.__userData__.checkIn
+            delete window.__userData__.checkOut
+        },
+
+        formatDate: (dateString) => {
+            const d = dateString.split('-')
+            return {
+                year: d[0] * 1,
+                month: d[1] * 1,
+                day: d[2] * 1
+            }
         },
 
         getData: () => data,
@@ -96,9 +111,12 @@ const calendarUICtrl = (calendCtrl => {
     const data = calendCtrl.getData()
 
     const DOMstrings = {
-        date: '#date',
+        date: 'date',
         dates: "dates",
         days: "days",
+        tHead: 'thtr',
+        tBody: 'tb',
+        calendarRow: 'ui-calendar',
         month: "month",
         year: "year",
         prevMonth: "prev-month",
@@ -110,40 +128,90 @@ const calendarUICtrl = (calendCtrl => {
         result: 'result',
         searchBox: 'search-box'
     }
+    const weekNames = ["lu", "ma", "mi", "ju", "vi", "sa", "do"]
 
     return {
         /**
          * It loads the month days into a grid.
          */
-        displayFullMonth: () => {
-            let datesElement = document.getElementById(DOMstrings.dates)
-            let firstOfMonth = calendCtrl.firstOfMonth()
-            let totalMonthDays = calendCtrl.getTotalDays(DATE.month)
-            let prevMonthDays = calendCtrl.getTotalDays(DATE.month - 1)
+        createUICalendar: function () {
+            const tHead = document.getElementById(DOMstrings.tHead)
+            const tBody = document.getElementById(DOMstrings.tBody)
+            const dayOne = calendCtrl.firstOfMonth()
+            const totalDays = calendCtrl.getTotalDays(DATE.month)
+            let weeks = dayOne === 6 ? 6 : Math.ceil(totalDays / 7)
+            let loopOne = true
+            let day = 1
+            console.log(totalDays)
+            tHead.textContent = ''
+            tBody.textContent = ''
 
-            for (let i = firstOfMonth; i > 0; i--) {
-                //I add 1 to prevMonthDays so it starts to substract from the actual last date.
-                let lastDays = (prevMonthDays + 1) - i
-                datesElement.innerHTML += ` <div class="days calendar__date calendar__item calendar__last-days" id="date" data-month="${DATE.month - 1 == -1 ? 11 : DATE.month - 1}" data-year="${DATE.year}">${lastDays}</div>`
+            for (let i = 0; i <= weekNames.length - 1; i++) {
+                tHead.innerHTML += `<th scope="col">${weekNames[i]}</th>`
             }
 
-            for (let i = 1; i <= totalMonthDays; i++) {
-                if (
-                    i < DATE.day && DATE.month === DATE.currentMonth ||
-                    DATE.month < DATE.currentMonth && DATE.year === DATE.currentYear ||
-                    DATE.year < DATE.currentYear
-                ) {
+            for (let i = 0; i < weeks + 1; i++) {
+                let row = tBody.insertRow()
+                row.classList.add('ui-calendar')
 
-                    datesElement.innerHTML += ` <div class="days calendar__date calendar__item calendar__last-days" id="date" data-month="${DATE.month}" data-year="${DATE.currentYear}">${i}</div>`
-
-                } else if (
-                    i >= DATE.day ||
-                    DATE.month > DATE.currentMonth && DATE.year === DATE.currentYear ||
-                    DATE.year > DATE.currentYear
-                ) {
-                    datesElement.innerHTML += ` <div class="days calendar__date calendar__item calendar__following-days" id="date" data-month="${DATE.month}" data-year="${DATE.year}">${i}</iv>`
+                if (i == 0 && dayOne !== 0) {
+                    for (let j = dayOne; j > 0; j--) {
+                        let cell = row.insertCell()
+                        cell.classList.add('ui-calendar__date--empty')
+                        cell.innerHTML = ''
+                    }
                 }
 
+                for (let j = loopOne ? dayOne : 0; j < 7; j++) {
+                    if (day > totalDays) return
+                    let cell = row.insertCell()
+                    cell.dataset.date = `${DATE.year}-${DATE.month + 1}-${day}`
+                    cell.classList.add('ui-calendar')
+
+                    if (
+                        day === DATE.day &&
+                        DATE.month === DATE.currentMonth &&
+                        window.__userData__checkIn !== cell.dataset.date
+                    ) {
+
+                        cell.classList.add('ui-calendar__date--today')
+
+                    } else if (
+                        day < DATE.day && DATE.month === DATE.currentMonth ||
+                        DATE.month < DATE.currentMonth && DATE.year === DATE.currentYear ||
+                        DATE.year < DATE.currentYear
+                    ) {
+
+                        cell.classList.add('ui-calendar__date--disabled')
+
+                    } else if (
+                        day > DATE.day ||
+                        DATE.month > DATE.currentMonth && DATE.year === DATE.currentYear ||
+                        DATE.year > DATE.currentYear
+                    ) {
+
+                        cell.classList.add('ui-calendar__date')
+
+                        if (window.__userData__ !== undefined) {
+                            if ('checkIn' in window.__userData__) {
+                                cell.dataset.date === window.__userData__.checkIn ?
+                                    cell.classList.add('ui-calendar__date--selected') :
+                                    null
+                            }
+                            if (
+                                'checkOut' in window.__userData__ &&
+                                cell.dataset.date === window.__userData__.checkOut
+                            ) {
+                                cell.classList.add('ui-calendar__date--selected')
+                            }
+                        }
+                    }
+                    cell.innerHTML = `${day}`
+                    day++
+                    loopOne = false
+                }
+
+                if (window.__userData__.checkOut !== undefined) this.inRangeLogic('selected', 'in-range', false, true)
             }
         },
         /**
@@ -160,116 +228,125 @@ const calendarUICtrl = (calendCtrl => {
 
         /**
          * Adds the value checkin and checkout data to the input field of type=text.
-         * 
-         * @param {String} elID (ID of the element)
-         * @param {Object} dataObj (Data object stored in calendarCtrl)
          */
         displayInputValue: () => {
-            document.getElementById(DOMstrings.checkinEl).value = data.checkIn
-            document.getElementById(DOMstrings.checkoutEl).value = data.checkOut
+            document.getElementById(DOMstrings.checkinEl).innerText = data.checkIn
+            document.getElementById(DOMstrings.checkoutEl).innerText = data.checkOut
         },
         /**
          * It changes the value of a type=text input form to empty string
          */
         clearCheckinCheckout: () => {
-            document.getElementById(DOMstrings.checkinEl).value = ''
-            document.getElementById(DOMstrings.checkoutEl).value = ''
+            document.getElementById(DOMstrings.checkinEl).innerText = '---'
+            document.getElementById(DOMstrings.checkoutEl).innerText = '---'
         },
         /**
-         * It parses a Nodelist to look for a specific className. If the condition is met it pushes the elements index.
-         * @param {Array<Nodelist>} HTMLCollection  
-         * @param {string} className 
-         * 
-         * @returns {Array<number>}  Array<number>
+         * It parses a Nodelist to look for a specific className. 
+         * If the condition is met it pushes the elements index.
          */
-        findIndexOfHTMLCollection: (HTMLCollection, className) => {
-            let res = []
-            Array.from(HTMLCollection).forEach((el, i) => el.classList.contains(className) ?
-                res.push(i) : null)
+        findIndexOfSelectedEl: (HTMLCollection, className) => {
+            let tdArr = []
+            let inOut = []
+            let res
+            console.log(HTMLCollection)
 
+            Array.from(HTMLCollection).forEach((x, i) => {
+                if (x.classList.length > 1 && x.classList[x.classList.length - 1] === `ui-calendar__date--${className}`) {
+                    inOut.push(i)
+                }
+
+                if (x.computedRole === 'row') {
+                    tdArr.push(0)
+                } else {
+                    tdArr.push(i)
+                }
+            })
+
+            if (inOut.length == 2) {
+                inOut.sort((a, b) => a - b)
+                res = tdArr.splice(inOut[0], inOut[1] - inOut[0])
+            }
+            console.log(res)
             return res
         },
         /**
-         * This function adds style to two selected points (checkin, checkout) and fills the distance between 
+         * This function adds style to two selected points (checkin, checkout) and fills the distance between
          * those two points by adding a classList.
-         * 
-         * @param {*} e  event
-         * @param {*} domEl  DOM element className
-         * @param {*} parentEl  Parent element className
-         * @param {*} classActive  className
-         * @param {*} classDistance  className
          */
-        datePickerLogic: function (e, domEl, parentEl, classActive, classDistance) {
-            let element = document.getElementsByClassName(domEl)
+        inRangeLogic: function (classSelected, classInRange, eTarget, isDateHistory) {
+            let element = document.getElementsByClassName(DOMstrings.calendarRow)
+            let def = 'ui-calendar__date'
 
-            if (e.target.parentElement.className === parentEl) {
-                let isActive = e.target.classList.contains(classActive)
+            if (eTarget) {
+                let isActive = eTarget.classList.contains(`${def}--${classSelected}`)
 
                 if (!isActive) {
-                    e.target.classList.add(classActive)
+                    eTarget.classList.remove(def)
+                    eTarget.classList.add(`${def}--${classSelected}`)
                 } else {
-                    e.target.classList.remove(classActive)
-                }
-
-                let idxOfHTMLColl = this.findIndexOfHTMLCollection(element, classActive)
-
-                if (idxOfHTMLColl.length === 2) {
-                    for (let i = idxOfHTMLColl[0] + 1; i < idxOfHTMLColl[1]; i++) {
-                        element[i].classList.add(classDistance)
-                    }
-
-                } else if (data.clicks == 2 || idxOfHTMLColl.length >= 2) {
-                    for (let i = 0; i < element.length; i++) {
-                        element[i].classList.remove(classDistance)
-                        element[i].classList.remove(classActive)
-                    }
-
-                    e.target.classList.add(classActive)
+                    eTarget.classList.remove(`${def}--${classSelected}`)
+                    eTarget.classList.add(def)
                 }
             }
+            let response = this.findIndexOfSelectedEl(element, classSelected)
 
+            if (response) {
+                for (let i = 1; i < response.length; i++) {
+                    if (response[i] > 0) {
+                        element[response[i]].classList.remove(def)
+                        element[response[i]].classList.add(`${def}--${classInRange}`)
+                    }
+                }
+
+            } else if (data.clicks == 2) {
+
+                if (!isDateHistory) {
+                    for (let i = 0; i < element.length; i++) {
+                        element[i].classList.remove(`${def}--${classInRange}`)
+                        element[i].classList.remove(`${def}--${classSelected}`)
+                    }
+                }
+
+                if (eTarget) eTarget.classList.add(`${def}--${classSelected}`)
+            }
         },
         /**
-         * Stores checkin and checkout date in data object (calendarCtrl) it is depending on the clicks it recieves.
-         * @param {*} m  month
-         * @param {*} d  day
-         * @param {*} y year
+         * Stores checkin and checkout date in data object (calendarCtrl) 
+         * it is depending on the clicks it recieves.
          */
-        selectDates: function (m, d, y) {
+        selectDates: function (y, m, d) {
             data.clicks == 2 ? (calendCtrl.cleanDataObject(data),
-                this.clearCheckinCheckout()) : data.clicks
+                this.clearCheckinCheckout()) : null
 
             if (data.clicks == 0) {
-                window._in = `${y}/${m + 1}/${d}`
-                data.checkIn = `${d}/${m + 1}/${y}`
+                window.__userData__.checkIn = `${y}-${m}-${d}`
+
+                data.checkIn = `${d}-${m}-${y}`
                 data.clicks++
 
             } else if (data.clicks == 1) {
-                window._out = `${y}/${m + 1}/${d}`
-                data.checkOut = `${d}/${m + 1}/${y}`
-                data.clicks++
-                data.totalDays = calendarCtrl.totalDaysBetweenDates(data.checkIn, data.checkOut)
-                this.sortDateAndDisplay()
-            }
+                window.__userData__.checkOut = `${y}-${m}-${d}`
 
+                data.checkOut = `${d}-${m}-${y}`
+                data.clicks++
+                this.sortDateAndDisplay()
+                data.totalDays = calendarCtrl.totalDaysBetweenDates(window._in, window._out)
+            }
+            console.log({ checkIn: window.__userData__.checkIn, checkOut: window.__userData__.checkOut })
             console.log(data)
         },
         /**
          * It finds the greatest of two dates, and re-orders the data object if necessary.
          * **Disclaimer: Try not to use the window obj to store global data**
-         * 
-         * @param {string} date1
-         * @param {string} date2
-         * 
          */
         sortDateAndDisplay: () => {
-            let _in = window._in
-            let _out = window._out
+            let _in = window.__userData__.checkIn
+            let _out = window.__userData__.checkOut
+            let dtIn = new Date(_in)
+            let dtOut = new Date(_out)
 
-            if ((_in && _out) && (_in > _out)) {
+            if ((_in && _out) && (dtIn.getTime() > dtOut.getTime())) {
                 let temp
-                dtIn = new Date(_in)
-                dtOut = new Date(_out)
 
                 temp = data.checkIn
                 data.checkIn = data.checkOut
@@ -291,18 +368,25 @@ const calendarUICtrl = (calendCtrl => {
             const parentEl = document.getElementById(DOMstrings.result)
             const numOfpeople = document.getElementById(DOMstrings.searchBox).value
             const HTML = `
-                <div>
+                <div class="result-container">
+                    <h3>Thank you for booking with us</h3>
+                    <p>Your reservation details:</p>
                     <p>Checkin: ${data.checkIn}</p>
                     <p>Checkout: ${data.checkOut}</p>
-                    <p>Num of ppl: ${numOfpeople}</p>
+                    <p>Nights: ${data.totalDays}</p>
+                    <p>Total ${numOfpeople < 2 ? 'host' : 'hosts'} : ${numOfpeople}</p>
+                    <div>
+                        <p>65€/<span>pppn</span></p>
+                        <p>TOTAL: ${data.totalPrice}€<p>
+                    </div>
                 </div>
             `
             parentEl.innerHTML = ''
             parentEl.insertAdjacentHTML('beforeend', HTML)
         },
         /**
-         * loads the view by hydrating the HTML template string into the specified DOM element.
-         * @returns DOM element
+         * loads the view by hydrating the HTML template string 
+         * into the specified DOM element.
          */
         loadView: (view) => {
             const root = document.getElementById(DOMstrings.root)
@@ -311,7 +395,6 @@ const calendarUICtrl = (calendCtrl => {
         },
         /**
          * It accesses object from calendarCtrl scope.
-         * @returns {Object} DOMstring object
          */
         getDOMstrings: () => DOMstrings,
 
@@ -324,23 +407,23 @@ define(() => {
     let now = calendarCtrl.getDateInicializer()
 
 
-    const setNewDate = () => {
+    const setNewDate = (e) => {
         now.setFullYear(DATE.year, DATE.month, DATE.day)
         calendarUICtrl.displayMonthAndYear()
-        document.getElementById(CALENDAR_DOM.dates).textContent = ''
-        calendarUICtrl.displayFullMonth()
+        calendarUICtrl.createUICalendar()
     }
 
     const setupEventListeners = () => {
         const ctrlDatePicker = (e) => {
-            let day = e.target.innerText
-            let month = e.target.dataset.month * 1
-            let year = e.target.dataset.year
+            let d, day, month, year
+            d = calendarCtrl.formatDate(e.target.dataset.date)
+            day = d.day
+            month = d.month
+            year = d.year
 
-            if (DATE.day >= DATE.currentDay && DATE.month === month || month > DATE.month || DATE.currentYear > DATE.year) {
-                calendarUICtrl.datePickerLogic(e, CALENDAR_DOM.days, 'calendar__dates', 'active', 'distance')
-                calendarUICtrl.selectDates(month, day, year, e.type)
-            }
+            calendarUICtrl.inRangeLogic('selected', 'in-range', e.target, false)
+            console.log(e.target)
+            calendarUICtrl.selectDates(year, month, day)
         }
 
         document.getElementById(CALENDAR_DOM.prevMonth).addEventListener('click', () => {
@@ -365,7 +448,7 @@ define(() => {
             document.getElementById('root').innerHTML = ""
             calendarUICtrl.loadView(view)
             calendarUICtrl.displayMonthAndYear()
-            calendarUICtrl.displayFullMonth()
+            calendarUICtrl.createUICalendar()
             setupEventListeners()
         }
     }
