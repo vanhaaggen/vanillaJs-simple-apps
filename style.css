@@ -314,7 +314,8 @@ ion-icon{
 }
 
 #dates{
-    width: 100%
+    width: 100%;
+    border-collapse: collapse;
 }
 
 td{
@@ -339,7 +340,7 @@ td{
   pointer-events: none
 }
 .ui-calendar__date--today{
-    color: #03a37d
+    color: #03a37d 
 }
 .ui-calendar__date--today,
 .ui-calendar__date{
@@ -401,13 +402,6 @@ td{
   border-radius: 5px;
   background: #50e3c3;
   cursor: pointer;
-}
-
-.selected{
-  background: #50e3c3
-}
-.in-range{
-    background: #94fde6
 }
 /*-Result-Container-*/
 

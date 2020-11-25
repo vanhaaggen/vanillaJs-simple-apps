@@ -15,12 +15,16 @@ const calendarCtrl = (() => {
 
     const data = {
         id: 0,
+        selected: null,
+        monthIn: null,
+        monthOut: null,
         clicks: 0,
         checkIn: 0,
         checkOut: 0,
         people: 0,
         totalDays: 0,
-        totalPrice: 0
+        totalPrice: 0,
+
     }
 
 
@@ -142,9 +146,11 @@ const calendarUICtrl = (calendCtrl => {
             let weeks = dayOne === 6 ? 6 : Math.ceil(totalDays / 7)
             let loopOne = true
             let day = 1
-            console.log(totalDays)
             tHead.textContent = ''
             tBody.textContent = ''
+
+
+
 
             for (let i = 0; i <= weekNames.length - 1; i++) {
                 tHead.innerHTML += `<th scope="col">${weekNames[i]}</th>`
@@ -170,8 +176,7 @@ const calendarUICtrl = (calendCtrl => {
 
                     if (
                         day === DATE.day &&
-                        DATE.month === DATE.currentMonth &&
-                        window.__userData__checkIn !== cell.dataset.date
+                        DATE.month === DATE.currentMonth
                     ) {
 
                         cell.classList.add('ui-calendar__date--today')
@@ -184,35 +189,30 @@ const calendarUICtrl = (calendCtrl => {
 
                         cell.classList.add('ui-calendar__date--disabled')
 
-                    } else if (
-                        day > DATE.day ||
-                        DATE.month > DATE.currentMonth && DATE.year === DATE.currentYear ||
-                        DATE.year > DATE.currentYear
-                    ) {
+                    }
 
-                        cell.classList.add('ui-calendar__date')
-
-                        if (window.__userData__ !== undefined) {
-                            if ('checkIn' in window.__userData__) {
-                                cell.dataset.date === window.__userData__.checkIn ?
-                                    cell.classList.add('ui-calendar__date--selected') :
-                                    null
-                            }
-                            if (
-                                'checkOut' in window.__userData__ &&
-                                cell.dataset.date === window.__userData__.checkOut
-                            ) {
-                                cell.classList.add('ui-calendar__date--selected')
-                            }
+                    if (window.__userData__ !== undefined) {
+                        if (
+                            'checkIn' in window.__userData__ &&
+                            cell.dataset.date === window.__userData__.checkIn
+                        ) {
+                            cell.classList.remove('ui-calendar__date--today')
+                            cell.classList.add('ui-calendar__date--selected')
+                        }
+                        if (
+                            'checkOut' in window.__userData__ &&
+                            cell.dataset.date === window.__userData__.checkOut
+                        ) {
+                            cell.classList.add('ui-calendar__date--selected')
                         }
                     }
+
                     cell.innerHTML = `${day}`
                     day++
                     loopOne = false
                 }
-
-                if (window.__userData__.checkOut !== undefined) this.inRangeLogic('selected', 'in-range', false, true)
             }
+
         },
         /**
          * It shows the Month name.
@@ -241,37 +241,41 @@ const calendarUICtrl = (calendCtrl => {
             document.getElementById(DOMstrings.checkoutEl).innerText = '---'
         },
         /**
-         * It parses a Nodelist to look for a specific className. 
-         * If the condition is met it pushes the elements index.
+         * It parses a Nodelist to look for a specific className, in this case it's [--selected]. 
+         * It picks the Index of the checkIn and checkOut dates and all the nodes that are in between, and saves
+         * them to an array.
+         * If the parsed node is a Table-Row it pushes a 0 as value to the array, to let inRangeLogic() function
+         * know that this value has not to be parsed.
          */
         findIndexOfSelectedEl: (HTMLCollection, className) => {
             let tdArr = []
-            let inOut = []
+            let selectedDates = []
             let res
+
             console.log(HTMLCollection)
 
             Array.from(HTMLCollection).forEach((x, i) => {
                 if (x.classList.length > 1 && x.classList[x.classList.length - 1] === `ui-calendar__date--${className}`) {
-                    inOut.push(i)
+                    selectedDates.push(i)
                 }
-
                 if (x.computedRole === 'row') {
                     tdArr.push(0)
                 } else {
                     tdArr.push(i)
                 }
             })
-
-            if (inOut.length == 2) {
-                inOut.sort((a, b) => a - b)
-                res = tdArr.splice(inOut[0], inOut[1] - inOut[0])
+            console.log(selectedDates)
+            if (selectedDates.length == 2) {
+                selectedDates.sort((a, b) => a - b)
+                res = tdArr.splice(selectedDates[0], selectedDates[1] - selectedDates[0])
+                data.selected = res
             }
             console.log(res)
             return res
         },
         /**
-         * This function adds style to two selected points (checkin, checkout) and fills the distance between
-         * those two points by adding a classList.
+         * This function controls the style by adding or removing classList property.
+         * It uses the findIndexOFSelectedEl() to determine the nodes that has to be
          */
         inRangeLogic: function (classSelected, classInRange, eTarget, isDateHistory) {
             let element = document.getElementsByClassName(DOMstrings.calendarRow)
@@ -281,25 +285,23 @@ const calendarUICtrl = (calendCtrl => {
                 let isActive = eTarget.classList.contains(`${def}--${classSelected}`)
 
                 if (!isActive) {
-                    eTarget.classList.remove(def)
                     eTarget.classList.add(`${def}--${classSelected}`)
                 } else {
                     eTarget.classList.remove(`${def}--${classSelected}`)
-                    eTarget.classList.add(def)
+
                 }
             }
             let response = this.findIndexOfSelectedEl(element, classSelected)
 
             if (response) {
                 for (let i = 1; i < response.length; i++) {
-                    if (response[i] > 0) {
-                        element[response[i]].classList.remove(def)
+                    if (!!response[i]) { //the !! converts the response type to Boolean, any number is 'true', and 0 is 'false'.
+
                         element[response[i]].classList.add(`${def}--${classInRange}`)
                     }
                 }
 
             } else if (data.clicks == 2) {
-
                 if (!isDateHistory) {
                     for (let i = 0; i < element.length; i++) {
                         element[i].classList.remove(`${def}--${classInRange}`)
@@ -322,12 +324,14 @@ const calendarUICtrl = (calendCtrl => {
                 window.__userData__.checkIn = `${y}-${m}-${d}`
 
                 data.checkIn = `${d}-${m}-${y}`
+                data.monthIn = m
                 data.clicks++
 
             } else if (data.clicks == 1) {
                 window.__userData__.checkOut = `${y}-${m}-${d}`
 
                 data.checkOut = `${d}-${m}-${y}`
+                data.monthOut = m
                 data.clicks++
                 this.sortDateAndDisplay()
                 data.totalDays = calendarCtrl.totalDaysBetweenDates(window._in, window._out)
@@ -353,9 +357,6 @@ const calendarUICtrl = (calendCtrl => {
                 data.checkOut = temp
 
                 calendarUICtrl.displayInputValue()
-
-                delete window._in
-                delete window._out
 
             } else {
                 calendarUICtrl.displayInputValue()
@@ -405,12 +406,19 @@ define(() => {
     const CALENDAR_DOM = calendarUICtrl.getDOMstrings();
     const DATE = calendarCtrl.getDateObjects()
     let now = calendarCtrl.getDateInicializer()
-
+    let data = calendarCtrl.getData()
 
     const setNewDate = (e) => {
         now.setFullYear(DATE.year, DATE.month, DATE.day)
         calendarUICtrl.displayMonthAndYear()
         calendarUICtrl.createUICalendar()
+        if (
+            Array.isArray(data.selected) &&
+            (DATE.month + 1) === data.monthIn ||
+            (DATE.month + 1) === data.monthOut
+        ) {
+            calendarUICtrl.inRangeLogic('selected', 'in-range', false, true)
+        }
     }
 
     const setupEventListeners = () => {
@@ -421,9 +429,10 @@ define(() => {
             month = d.month
             year = d.year
 
+
             calendarUICtrl.inRangeLogic('selected', 'in-range', e.target, false)
-            console.log(e.target)
             calendarUICtrl.selectDates(year, month, day)
+            console.log(e.target)
         }
 
         document.getElementById(CALENDAR_DOM.prevMonth).addEventListener('click', () => {
