@@ -65,7 +65,21 @@ define(() => {
         
         <p class="calendar__top-p-element">Select your dates:</p>
 
-        <div class="calendar">
+        <div class="search-container">
+            <form class="search sb">
+                <input id="select" class="sb-container" type="text" placeholder="Check-in / Check-out" readonly value>
+
+                <select name="NumberOfPeople" class="sb-select" id="search-box">
+                    <option>1</option>
+                    <option selected="selected">2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+                <button id="btn-submit" class="booking-btn">Book</button>
+            </form>
+        </div>
+
+        <div class="calendar calendar-none" >
             <div class="calendar__info">
                 <div class="calendar__prev btn-click-fx" id="prev-month">
                     <ion-icon class="calendar__nav-btn" name="caret-back-outline"></ion-icon>
@@ -77,70 +91,17 @@ define(() => {
                 </div>
             </div>
 
-
             <table id="dates">
                 <thead>
                     <tr id="thtr"></tr>
                 </thead>
                 <tbody id="tb"></tbody>
-            </table>
-
-            <!--<div class="calendar__week">
-                <div class="calendar__item">Mon</div>
-                <div class="calendar__item">Tue</div>
-                <div class="calendar__item">Wed</div>
-                <div class="calendar__item">Thu</div>
-                <div class="calendar__item">Fri</div>
-                <div class="calendar__item">Sat</div>
-                <div class="calendar__item">Sun</div>
-            </div>
-
-            <div class="calendar__dates" id="dates"></div>-->
+            </table> 
 
         </div>
 
-        <div class="search-container">
-            <div class="search sb">
-                <div class="sb-container">
-                    <div class="sb-sub-container">
-                        <p class="sb-label">Check-in</p>
-                        <p id="checkin">---</p>
-                    </div>
-                    <div class="sb-sub-container">
-                        <p class="sb-label">Check-out</p>
-                        <p id="checkout">---</p>
-                     </div>
-                </div>
-                <select name="NumberOfPeople" class="sb-select" id="search-box">
-                    <option>1</option>
-                    <option selected="selected">2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
-                <button id="btn-submit" class="booking-btn">Book</button>
-            </div>
-        </div>
-
-        <!--<div id="result" class="cal-res">
-        
-                
-                    <h3>Thank you for booking with us.</h3>
-
-                    <p>Your reservation details:</p>
-
-                    <ul class="cal-res__ul">
-                        <li class="cal-res-ul__li">Checkin: <span>18/11/2020</span></li>
-                        <li class="cal-res-ul__li">Checkout: <span>27/11/2020</span></li>
-                        <li class="cal-res-ul__li"><ion-icon name="people"></ion-icon>Nights: <span>9</span></li>
-                        <li class="cal-res-ul__li">Total hosts: <span>2</span></li>
-                        <li class="cal-res-ul__li">
-                            <p>65€/<span>pppn</span></p>
-                            <p>TOTAL: <span>€ 185</span><p>
-                        </li>
-                    </ul>
-                
-
-        </div>-->
+        <div id="result"></div>
+      
 
         ${github('calendar')}
 `
