@@ -9,8 +9,7 @@ body,h2,h3,h4,p, li{
     margin: 0
 }
 
-
-li{
+li, ul{
     list-style: none;
     padding: 0
 }
@@ -39,7 +38,7 @@ body {
     --font-open-sans: 'Open Sans', sans-serif
 }
 /*---------general---------------*/
-ul,
+.ul-nav,
 .main-container, 
 .container-left,
 .input-container,
@@ -99,9 +98,9 @@ ul,
 
 /*---------left-CONTAINER------------------*/
 /*-----------------------------------------*/
-ul { flex-direction: column; }
+.ul-nav { flex-direction: column; }
 
-li{
+.ul-nav > li{
     cursor: pointer;
     padding: 0 1rem .5rem 0
 }
@@ -272,7 +271,12 @@ ion-icon{
     color: #000000a4;
     font-weight: 600;
 }
-.calendar, 
+
+.calendar-none{
+    display: none
+}
+
+.calendar,
 .cal-res {
   background: #fcfcfc;
   border-radius: 5px;
@@ -285,6 +289,7 @@ ion-icon{
   -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
  }
+
 .calendar__info {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -322,19 +327,9 @@ td{
     text-align: center;
     cursor: pointer;
 }
-
-/* .calendar__week, .calendar__dates {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-gap: 8px; 
-} */
 .calendar__month, .calendar__year {
   padding: .5em 1em; 
 }
-/* .calendar__item {
-  text-align: center;
-  line-height: 2; 
-} */
 .ui-calendar__date--disabled {
   color: #c2c2c2; 
   pointer-events: none
@@ -406,22 +401,36 @@ td{
 /*-Result-Container-*/
 
 .cal-res{
+    margin-top: 1rem;
     background: var(--color-main-elements);
     padding-left: 1rem
 }
-
-
-
-.cal-res__ul{
-    padding: 0
+.cal-res-ul__li{
+    padding: .2rem 0;
+    display: flex;
+    align-items: center;
 }
 
+.cal-res-ul__li > ion-icon {
+    font-size: 1rem;
+    padding-right: .2rem;
+    color: #369782
+}
+
+.abrev{
+    font-size: small;
+}
+
+.cal-data{
+    padding-left: .5rem;
+
+}
 
 /*---------MEDIA-QUERIES----------*/
 /*--------------------------------*/
 
   @media(max-width: 1024px){
-    ul{
+    .ul-nav{
         flex-direction: row;
     }
     .title{
