@@ -255,6 +255,97 @@ ion-icon{
 }
 
 
+/*------REGISTER-LOGIN-APP-----*/
+/*-----------------------------*/
+
+.app-reglog{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.init-choose,
+.ctnr-register,
+.ctnr-login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-top: 8px solid #50e3c3;
+    border-radius: 4px;
+    width: 80%;
+    min-width: 350px;
+    max-width: 450px;
+    padding: .5em 0;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
+    background: #f5f5f5
+}
+
+.init-choose > div {
+    padding: 1rem
+}
+
+.reglog-form{
+    display: flex;
+    flex-direction: column;
+    width: 80%
+}
+
+.reglog-input{
+    outline: none;
+    border: none;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-bottom: 1px solid #868585;
+    background:  #eeecec;
+    height: 1.5rem;
+}
+
+.reglog-label{
+    margin-top: 1.2rem
+}
+
+.ctnr-reglog-btn{
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0 1rem 0
+}
+.reglog-btn {
+    border: none;
+    width: 8rem;
+    height: 3rem;
+    border-radius: 4px;
+    font-weight: 400;
+    font-size: 1.1rem;
+    cursor: pointer;
+    -webkit-box-shadow: 3px 3px 4px -3px rgba(0,0,0,0.43);
+    -moz-box-shadow: 3px 3px 4px -3px rgba(0,0,0,0.43);
+    box-shadow: 3px 3px 4px -3px rgba(0,0,0,0.43);
+    outline: none  
+}
+
+.reglog-btn:active{
+    transform: translateY(2px);
+}
+
+.register-btn{background: #ebe9e9;}
+.register-btn:hover{background: #dbdada}
+.register-btn:active{background:  #cccccc}
+
+.login-btn{
+    background: #50e3c3;
+    color: white;
+}
+.login-btn--margin{margin-bottom: 1rem}
+.login-btn:hover{background: #4dd4b5}
+.login-btn:active{background: #3fb398}
+
+.reglog-anchor{
+    color: #3fb398;
+    cursor: pointer
+}
+/*--------------------------------*/
 
 /*---------CALENDAR APP-----------*/
 /*--------------------------------*/

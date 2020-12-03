@@ -51,6 +51,56 @@ define(() => {
 
         register: `
         <h1>Register Form App</h1>
+        <template id="init">
+            <div class="init-choose">
+                <div>Don't think twice</div>
+                <button id="init-register" class="reglog-btn register-btn">REGISTER</button>
+                <div>--- Already have an account? ---</div>
+                <button id="init-login" class="reglog-btn login-btn login-btn--margin">LOGIN</button>
+            </div>
+        </template>
+        <template id="signup">
+            <div class="ctnr-register">
+                <h3>Create your account</h3>
+                <form class="reglog-form" id="register">
+                    <label class="reglog-label" for="fname">First name</label>
+                    <input class="reglog-input" type="text" name="fname" id="fname">
+                    <label class="reglog-label" for="lname">Last name</label>
+                    <input class="reglog-input" type="text" name="lname" id="lname">
+                    <label class="reglog-label" for="email">E-mail</label>
+                    <input class="reglog-input" type="email" name="email" id="email">
+                    <label class="reglog-label" for="pword">Password</label>
+                    <input class="reglog-input" type="password" name="pword" id="pword">
+                    <div class="ctnr-reglog-btn">
+                        <button id="submit-register" class="reglog-btn register-btn" type="submit">REGISTER</button>
+                    </div>
+                </form>
+            </div>
+        </template>
+        <template id="confirm">
+            <div class="ctnr-confirm ">
+                <div>
+                    <p>You have succesfully registered, please <a id="confirm-login" class="reglog-anchor">login</a></p>
+                </div>
+            </div>
+        </template>
+        <template id="login">
+            <div class="ctnr-login">
+                <h3>Nice to see you again</h3>
+                <form class="reglog-form" id="login">
+                    <label class="reglog-label" for="email">E-mail</label>
+                    <input class="reglog-input" type="email" name="email" id="email">
+                    <label class="reglog-label" for="pword">Password</label>
+                    <input class="reglog-input" type="password" name="pword" id="pword">
+                    <div class="ctnr-reglog-btn">
+                        <button id="submit-login" class="reglog-btn login-btn">LOGIN</button>
+                    </div>
+                </form>
+            </div>
+        </template>
+
+        <div class="app-reglog"></div>
+
         ${github('register')}
         `,
 
