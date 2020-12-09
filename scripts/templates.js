@@ -54,27 +54,29 @@ define(() => {
         <template id="init">
             <div class="init-choose">
                 <div>Don't think twice</div>
-                <button id="init-register" class="reglog-btn register-btn">REGISTER</button>
+                <button type="button" id="init-register" class="reglog-btn register-btn">REGISTER</button>
                 <div>--- Already have an account? ---</div>
-                <button id="init-login" class="reglog-btn login-btn login-btn--margin">LOGIN</button>
+                <button type="button" id="init-login" class="reglog-btn login-btn login-btn--margin">LOGIN</button>
             </div>
         </template>
         <template id="signup">
             <div class="ctnr-register">
                 <h3>Create your account</h3>
                 <form class="reglog-form" id="register">
-                    <label class="reglog-label" for="fname">First name</label>
-                    <input class="reglog-input" type="text" name="fname" id="fname">
-                    <label class="reglog-label" for="lname">Last name</label>
-                    <input class="reglog-input" type="text" name="lname" id="lname">
-                    <label class="reglog-label" for="email">E-mail</label>
-                    <input class="reglog-input" type="email" name="email" id="email">
-                    <label class="reglog-label" for="pword">Password</label>
-                    <input class="reglog-input" type="password" name="pword" id="pword">
+                    <label class="reglog-label" for="name">First name*<span class="error err-name"></span></label>
+                    <input class="reglog-input" type="text" name="name" id="name" required>
+                    <label class="reglog-label" for="surname">Last name*<span class="error err-surname"></span></label>
+                    <input class="reglog-input" type="text" name="surname" id="surname" required>
+                    <label class="reglog-label" for="email">E-mail*<span class="error err-email"></span></label>
+                    <input class="reglog-input" type="email" name="email" id="email" required>
+                    <label class="reglog-label" for="password">Password*<span class="error err-password"></span></label>
+                    <input class="reglog-input" type="password" name="password" id="password" required>
+                   
+                    </form>
                     <div class="ctnr-reglog-btn">
-                        <button id="submit-register" class="reglog-btn register-btn" type="submit">REGISTER</button>
+                        <button type="button" id="submit-register" class="reglog-btn register-btn">REGISTER</button>
                     </div>
-                </form>
+                    <div id="reg-back" class="go-back"><--back</div>
             </div>
         </template>
         <template id="confirm">
@@ -88,14 +90,15 @@ define(() => {
             <div class="ctnr-login">
                 <h3>Nice to see you again</h3>
                 <form class="reglog-form" id="login">
-                    <label class="reglog-label" for="email">E-mail</label>
+                    <label class="reglog-label" for="email">E-mail <span class="error err-email"></label>
                     <input class="reglog-input" type="email" name="email" id="email">
-                    <label class="reglog-label" for="pword">Password</label>
-                    <input class="reglog-input" type="password" name="pword" id="pword">
+                    <label class="reglog-label" for="password">Password <span class="error err-password"></label>
+                    <input class="reglog-input" type="password" name="password" id="password">
+                    </form>
                     <div class="ctnr-reglog-btn">
-                        <button id="submit-login" class="reglog-btn login-btn">LOGIN</button>
+                        <button type="button" id="submit-login" class="reglog-btn login-btn">LOGIN</button>
                     </div>
-                </form>
+                    <div id="log-back" class="go-back"><--back</div>
             </div>
         </template>
 

@@ -1,43 +1,153 @@
 const reglogModelCtrl = (() => {
     class User {
-        constructor(name, surname, email, password) {
-            this.id = this.generateId()
+        constructor(id, name, surname, email, password) {
+            this.id = id
             this.name = name
             this.surname = surname
             this.email = email
             this.password = password
         }
 
-        generateId() {
-            return Math.floor(Math.random() * 1000000)
+        sStorage() {
+            sessionStorage.setItem(`${this.email}`, JSON.stringify(this))
         }
+
     }
-    const userData = {
-        test: 'HI'
+
+    let localData = {
+        countID: 0
     }
+
+    let error = []
+
     return {
 
         getUserData: () => {
             return userData
         },
+        getLocalData: () => {
+            return localData
+        },
 
-        testUserClass: (name, surname, email, password) => {
-            let user = new User(name, surname, email, password)
-            return user
+        getError: () => {
+            return error
+        },
+
+        clearError: () => error.length = 0,
+
+        validate: () => {
+            const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return {
+                string: (target, name) => {
+                    if (!target.trim()) error.push({
+                        target: name,
+                        message: 'field is empty or blank'
+                    })
+                },
+                email: (target, name) => {
+                    if (target.trim() && !EMAIL_REGEX.test(target)) error.push({
+                        target: name,
+                        message: 'Not a valid email format'
+                    })
+                },
+                exist: (target, name) => {
+                    if (sessionStorage.getItem(target)) error.push({
+                        target: name,
+                        message: 'User already exists'
+                    })
+                },
+                password: (target, email, name) => {
+                    let isUser = sessionStorage.getItem(email)
+                    if (isUser) {
+                        if (target.trim() && target !== JSON.parse(sessionStorage.getItem(email)).password) error.push({
+                            target: name,
+                            message: 'Wrong credentials'
+                        })
+                    }
+                }
+            }
+        },
+
+        addToSStorage: (obj) => {
+            const { name, surname, email, password } = obj || {}
+
+            localData.countID++
+            let id = localData.countID
+
+            let user = new User(id, name, surname, email, password)
+            user.sStorage()
         }
     }
 })()
 
-const reglogUICtrl = (() => {
+const reglogUICtrl = ((reglogMCtrl) => {
     const DOM_STRG = {
         init: 'init',
         register: 'signup',
+        name: 'name',
+        surname: 'surname',
+        email: 'email',
+        password: 'password',
+        form: '.reglog-form',
         login: 'login',
         confirm: 'confirm',
-        app: '.app-reglog'
+        app: '.app-reglog',
+        error: 'error'
+
     }
 
     return {
+        handleRegisterData: function () {
+            let element = (id) => document.getElementById(id)
+            let name = element(DOM_STRG.name).value
+            let surname = element(DOM_STRG.surname).value
+            let email = element(DOM_STRG.email).value
+            let password = element(DOM_STRG.password).value
+
+            let validate = reglogMCtrl.validate()
+            validate.string(name, 'name')
+            validate.string(surname, 'surname')
+            validate.email(email, 'email')
+            validate.exist(email, 'email')
+            validate.string(password, 'password')
+
+            console.log('handleRegister')
+            let isError = this.handleError()
+            if (!isError) {
+                return {
+                    name: name,
+                    surname: surname,
+                    email: email,
+                    password: password
+                }
+            } else {
+                return
+            }
+
+        },
+
+        handleLoginData: function () {
+            let element = (id) => document.getElementById(id)
+            let email = element(DOM_STRG.email).value
+            let password = element(DOM_STRG.password).value
+
+            let validate = reglogMCtrl.validate()
+            validate.string(email, 'email')
+            validate.string(password, 'password')
+            validate.email(email, 'email')
+            validate.password(password, email, 'password')
+
+            let isError = this.handleError()
+            if (!isError) {
+                let data = JSON.parse(sessionStorage.getItem(email))
+                console.log(data)
+                return data
+            } else {
+                return
+            }
+
+        },
+
         loadView: view => {
             const hydrate = document.getElementById('root').insertAdjacentHTML("beforeend", view)
             return hydrate
@@ -49,6 +159,32 @@ const reglogUICtrl = (() => {
             if (querySelector) {
                 this.unmountTemplate(querySelector)
                 this.mountTemplate(element)
+            }
+        },
+
+        handleError: () => {
+            let error = reglogMCtrl.getError()
+            let spanEl = document.getElementsByClassName(DOM_STRG.error)
+
+            for (let i = 0; i < spanEl.length; i++) {
+                spanEl[i].innerText = ""
+                document.getElementsByClassName('reglog-input')[i].classList.remove('reglog-input-error')
+            }
+
+            if (error.length > 0) {
+                for (let i = 0; i < spanEl.length; i++) {
+                    for (let j = 0; j < error.length; j++) {
+                        if (spanEl[i].classList[1] === `err-${error[j].target}`) {
+                            let content = document.createTextNode(error[j].message)
+                            spanEl[i].appendChild(content)
+                            document.getElementById(error[j].target).classList.add('reglog-input-error')
+                        }
+                    }
+                }
+                reglogMCtrl.clearError()
+                return true
+            } else {
+                return false
             }
         },
 
@@ -78,7 +214,7 @@ const reglogUICtrl = (() => {
         }
 
     }
-})()
+})(reglogModelCtrl)
 
 define(() => {
     const DOMstrg = reglogUICtrl.getDomStrg()
@@ -93,21 +229,35 @@ define(() => {
                 reglogUICtrl.display(DOMstrg.login)
                 break
             case 'submit-register':
-                reglogUICtrl.display(DOMstrg.confirm)
+                const data = reglogUICtrl.handleRegisterData()
+                if (data) {
+                    reglogModelCtrl.addToSStorage(data)
+                    reglogUICtrl.display(DOMstrg.confirm)
+                }
                 break
             case 'confirm-login':
                 reglogUICtrl.display(DOMstrg.login)
                 break
             case 'submit-login':
-                alert('welcome to your account!')
+                const user = reglogUICtrl.handleLoginData()
+                if (user) {
+                    alert(`Hi ${user.name}`)
+                }
+                break
+            case 'log-back':
+            case 'reg-back':
+                reglogUICtrl.display(DOMstrg.init)
+                break
         }
     }
+
 
     const setupEventListeners = () => {
 
         document.querySelector(DOMstrg.app).addEventListener('click', (e) => {
             eventCtrl(e)
         }, false)
+
     }
 
     return {

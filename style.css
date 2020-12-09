@@ -302,6 +302,10 @@ ion-icon{
     height: 1.5rem;
 }
 
+.reglog-input-error{
+    border: 1px solid red
+}
+
 .reglog-label{
     margin-top: 1.2rem
 }
@@ -323,6 +327,15 @@ ion-icon{
     -moz-box-shadow: 3px 3px 4px -3px rgba(0,0,0,0.43);
     box-shadow: 3px 3px 4px -3px rgba(0,0,0,0.43);
     outline: none  
+}
+
+.error{
+    color: red;
+    padding: 1rem
+}
+
+.go-back{
+    cursor: pointer;
 }
 
 .reglog-btn:active{
