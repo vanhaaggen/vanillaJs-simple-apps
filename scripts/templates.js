@@ -76,7 +76,14 @@ define(() => {
                     <div class="ctnr-reglog-btn">
                         <button type="button" id="submit-register" class="reglog-btn register-btn">REGISTER</button>
                     </div>
-                    <div id="reg-back" class="go-back"><--back</div>
+                    <div class="go-back"> 
+                        <div class="back">
+                            <div id="reg-back" class="back-icon">
+                                <ion-icon name="chevron-back-outline"></ion-icon>
+                                back
+                            </div>
+                        </div>
+                    </div>
             </div>
         </template>
         <template id="confirm">
@@ -98,7 +105,14 @@ define(() => {
                     <div class="ctnr-reglog-btn">
                         <button type="button" id="submit-login" class="reglog-btn login-btn">LOGIN</button>
                     </div>
-                    <div id="log-back" class="go-back"><--back</div>
+                    <div class="go-back">
+                        <div class="back">
+                            <div id="log-back" class="back-icon">
+                                <ion-icon name="chevron-back-outline"></ion-icon>
+                                back
+                            </div>
+                        </div>
+                    </div>
             </div>
         </template>
 
