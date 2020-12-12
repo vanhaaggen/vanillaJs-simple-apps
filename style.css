@@ -27,13 +27,13 @@ body {
 }
 /*-------------------------------*/
 :root{
-    --background-js: #f7e018;
+    --background-js: #f5df4d; 
     --color-js: #141414;
     --color-add-bttn:  #6bdc52;
     --color-error-bttn: red;
     --color-main-elements: #f5f5f5;
     --color-second-elements: #eae8e8;
-    --color-border-grey: #999797;
+    --color-ultimate-grey:  #939597;
     --font-roboto: 'Roboto', sans-serif;
     --font-open-sans: 'Open Sans', sans-serif
 }
@@ -98,25 +98,47 @@ body {
 
 /*---------left-CONTAINER------------------*/
 /*-----------------------------------------*/
-.ul-nav { flex-direction: column; }
-
-.ul-nav > li{
-    cursor: pointer;
-    padding: 0 1rem .5rem 0
+.nav-ul { 
+    flex-direction: column; 
+    font-family: var(--font-open-sans);
 }
+
+.nav-ul-li{
+    cursor: pointer;
+    text-align: center;
+    padding: .5rem .2rem;
+    margin: 1rem 0 0 0;
+    color: var(--color-ultimate-grey);
+
+    border-radius: 41px;
+    background: #f5df4d;
+    box-shadow:  6px 6px 12px #eed84b, 
+                 -6px -6px 12px #fce64f;    
+}
+
+.nav-ul-li:hover{
+    box-shadow:  5px 5px 10px #e6d248, 
+             -5px -5px 10px #ffec52;
+}
+.nav-ul-li:active{
+    box-shadow:  inset -5px -5px 10px #ffec52,
+                inset 5px 5px 10px #e6d248
+}
+
+
+
 .container-left{
     align-items: center;
     flex-direction: column;
     width: 350px;
     height: 100vh;
     min-width: 150px;
-    background: var(--background-js); 
-    color:var(--color-js)
+    background: var(--background-js);   
 }
 
 .title{
     flex-direction: column; 
-    border: 2px solid var(--color-main-elements);   
+    border: 2px solid var(--color-ultimate-grey);   
 }
 .title__lang{
     display: flex;
@@ -132,16 +154,18 @@ body {
     text-align: right;
     font-size: 2.5rem;
     font-weight: 700;
-    font-family: var(--font-roboto); 
+    font-family: var(--font-roboto);
+    color: var(--color-ultimate-grey)
 }
 
 .title__lang-desc{
     height: 50%;
     font-size: 2rem;
-    border: 2px solid var(--color-main-elements);
-    background: var(--color-main-elements);
+    border: 2px solid var(--color-ultimate-grey);
+    background: var(--color-ultimate-grey); 
     font-family: var(--font-open-sans); 
     padding: .5rem;
+    color: var(--color-main-elements)
 
 }
 .title, .input-container{ 
@@ -157,7 +181,7 @@ body {
     min-width: 20rem;
     padding-bottom: 1rem;
     flex-direction: column;
-    border-bottom: 1px dashed var(--color-border-grey)
+    border-bottom: 1px dashed var(--color-ultimate-grey)
 }
 
 .input__description{
@@ -233,7 +257,7 @@ body {
 
 .id,
 .task__date{
-    color: var(--color-border-grey)
+    color: var(--color-ultimate-grey)
 }
 
 .item-top{

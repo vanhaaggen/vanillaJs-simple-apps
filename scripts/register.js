@@ -67,6 +67,11 @@ const reglogModelCtrl = (() => {
                 }
             }
         },
+        firstNameSurnameCharachter: (name, surname) => {
+            let nameFirstChar = name.substring(0, 1).toUpperCase()
+            let surnameFirstChar = surname.substring(0, 1).toUpperCase()
+            return `${nameFirstChar}${surnameFirstChar}`
+        },
 
         addToSStorage: (obj) => {
             const { name, surname, email, password } = obj || {}
@@ -92,6 +97,7 @@ const reglogUICtrl = ((reglogMCtrl) => {
         login: 'login',
         confirm: 'confirm',
         app: '.app-reglog',
+        user: 'user',
         error: 'error'
 
     }
@@ -108,6 +114,7 @@ const reglogUICtrl = ((reglogMCtrl) => {
             validate.string(name, 'name')
             validate.string(surname, 'surname')
             validate.email(email, 'email')
+            validate.string(email, 'email')
             validate.exist(email, 'email')
             validate.string(password, 'password')
 
@@ -199,6 +206,34 @@ const reglogUICtrl = ((reglogMCtrl) => {
             return classname
         },
 
+        userinterface: (obj) => {
+            let parent = document.querySelector('.ctnr-user')
+            let html = `
+                <div class="reglog-ppic">
+                    ${reglogMCtrl.firstNameSurnameCharachter(obj.name, obj.surname)}    
+                </div>
+                <div class="reglog-greeting">
+                    <h3>Hi ${obj.name},</h3>
+                    <p>great to see you again</p>
+                </div>
+                <ul>
+                   <li>name: ${obj.name}</li>
+                   <li>surname: ${obj.surname}</li>
+                   <li>email: ${obj.email}</li>
+                   <li>password: ${obj.password}</li>
+                </ul>
+                <div class="go-back">
+                    <div class="back">
+                        <div id="log-back" class="back-icon">
+                            <ion-icon name="close-sharp"></ion-icon>
+                            logout
+                        </div>
+                    </div>
+                </div>
+            `
+            parent.insertAdjacentHTML('beforeend', html)
+        },
+
         mountTemplate: element => {
             const el = document.getElementById(element)
             const clone = document.importNode(el.content, true)
@@ -241,7 +276,8 @@ define(() => {
             case 'submit-login':
                 const user = reglogUICtrl.handleLoginData()
                 if (user) {
-                    alert(`Hi ${user.name}`)
+                    reglogUICtrl.display(DOMstrg.user)
+                    reglogUICtrl.userinterface(user)
                 }
                 break
             case 'log-back':

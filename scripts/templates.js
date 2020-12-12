@@ -115,6 +115,9 @@ define(() => {
                     </div>
             </div>
         </template>
+        <template id="user">
+            <div class="ctnr-user"></div>
+        </template>
 
         <div class="app-reglog"></div>
 
