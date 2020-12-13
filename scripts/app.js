@@ -10,8 +10,13 @@ require([
             todo: 'todo',
             register: 'register',
             card: 'card',
-            calendar: 'calendar'
+            calendar: 'calendar',
+            todoMobile: 'todo-mobile',
+            registerMobile: 'register-mobile',
+            cardMobile: 'card-mobile',
+            calendarMobile: 'calendar-mobile'
         }
+
         const todoTemplate = view.getTemplate('todoapp')
         const registerTemplate = view.getTemplate('register')
         const cardTemplate = view.getTemplate('card')
@@ -19,8 +24,15 @@ require([
 
 
         document.getElementById(DOM_STRINGS.todo).addEventListener('click', () => todoApp.init(todoTemplate))
+        document.getElementById(DOM_STRINGS.todoMobile).addEventListener('click', () => todoApp.init(todoTemplate))
+
         document.getElementById(DOM_STRINGS.register).addEventListener('click', () => registerApp.init(registerTemplate))
+        document.getElementById(DOM_STRINGS.registerMobile).addEventListener('click', () => registerApp.init(registerTemplate))
+
         document.getElementById(DOM_STRINGS.card).addEventListener('click', () => cardApp.init(cardTemplate))
+        document.getElementById(DOM_STRINGS.cardMobile).addEventListener('click', () => cardApp.init(cardTemplate))
+
         document.getElementById(DOM_STRINGS.calendar).addEventListener('click', () => calendarApp.init(calendarTemplate))
+        document.getElementById(DOM_STRINGS.calendarMobile).addEventListener('click', () => calendarApp.init(calendarTemplate))
 
     })
