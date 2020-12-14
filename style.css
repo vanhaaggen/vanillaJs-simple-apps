@@ -287,7 +287,8 @@ ion-icon{
 
 .init-choose,
 .ctnr-register,
-.ctnr-login{
+.ctnr-login,
+.ctnr-user{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -302,6 +303,67 @@ ion-icon{
     -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
     background: #f5f5f5
+}
+
+
+
+.ctnr-reglog-ppic{
+    position: relative;
+    width: 100%;
+    height: 10rem;
+}
+
+.reglog-shape{
+    position: absolute;
+    margin: 0 auto;
+    bottom: 0;
+    width: 100%;
+    height: 5rem;
+    background-image: url(./shape2.png);
+    background-position: center;
+}
+
+.reglog-ppic{
+    width: 100%;
+    height: 10rem;
+    background-image: url(./shape.png);
+}
+
+.reglog-avatar{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 5rem;
+    height: 5rem;
+    top: 1.5rem;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+    font-size: 2rem;
+    color: var(--color-main-elements);
+    background-color: var(--color-ultimate-grey );
+    border-radius: 50%;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.27);
+}
+
+.reglog-greeting{
+    text-align: center;
+}
+
+.ctnr-user > ul{
+    width: 90%;
+    padding: 2rem 3rem; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #cccccc56;
+    border-radius: 5px
+
 }
 
 .init-choose > div {
@@ -509,9 +571,20 @@ td{
 .ui-calendar__date--in-range{
     background: #c2c2c2
 }
+
 .search-container{
-  width: 100%;
-  margin: 1em auto
+    margin: .5rem 0
+}
+
+.calendar-shape{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 23rem;
+    border-radius: 5px;
+    
+    background-image: url(./calendar-shape.png);
+
 }
 
 .sb{
@@ -522,7 +595,7 @@ td{
   min-width: 350px;
   max-width: 450px;
   height: 3rem;
-  background: #000000a4;
+  background: var(--color-ultimate-grey);
   border-radius: 5px
 }
 
@@ -587,6 +660,9 @@ td{
   @media (max-width: 1024px){
     .nav-ul{
         flex-direction: row;
+    }
+    .nav-ul-li{
+        margin: 0 .4rem
     }
     .title{
         justify-content: center;

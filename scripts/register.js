@@ -209,18 +209,24 @@ const reglogUICtrl = ((reglogMCtrl) => {
         userinterface: (obj) => {
             let parent = document.querySelector('.ctnr-user')
             let html = `
-                <div class="reglog-ppic">
-                    ${reglogMCtrl.firstNameSurnameCharachter(obj.name, obj.surname)}    
-                </div>
+                <div class="ctnr-reglog-ppic">
+                    <div class="reglog-avatar">
+                        <span>
+                        ${reglogMCtrl.firstNameSurnameCharachter(obj.name, obj.surname)}
+                        </span>
+                    </div>
+                    <div class="reglog-shape"></div>
+                    <div class="reglog-ppic"></div>
+                </div>    
                 <div class="reglog-greeting">
                     <h3>Hi ${obj.name},</h3>
                     <p>great to see you again</p>
                 </div>
                 <ul>
-                   <li>name: ${obj.name}</li>
-                   <li>surname: ${obj.surname}</li>
-                   <li>email: ${obj.email}</li>
-                   <li>password: ${obj.password}</li>
+                   <li>Name:  ${obj.name}</li>
+                   <li>Surname: ${obj.surname}</li>
+                   <li>E-mail: ${obj.email}</li>
+                   <li>Password: ${obj.password}</li>
                 </ul>
                 <div class="go-back">
                     <div class="back">

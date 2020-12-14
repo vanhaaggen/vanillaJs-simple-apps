@@ -135,41 +135,42 @@ define(() => {
         
         <p class="calendar__top-p-element">Select your dates:</p>
 
-        <div class="search-container">
-            <form class="search sb">
-                <input id="select" class="sb-container" type="text" placeholder="Check-in / Check-out" readonly value>
+        <div class="calendar-shape">
+            <div class="search-container">
+                <form class="search sb">
+                    <input id="select" class="sb-container" type="text" placeholder="Check-in / Check-out" readonly value>
 
-                <select name="NumberOfPeople" class="sb-select" id="search-box">
-                    <option>1</option>
-                    <option selected="selected">2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
-                <button id="btn-submit" class="booking-btn">Book</button>
-            </form>
-        </div>
-
-        <div class="calendar calendar-none" >
-            <div class="calendar__info">
-                <div class="calendar__prev btn-click-fx" id="prev-month">
-                    <ion-icon class="calendar__nav-btn" name="caret-back-outline"></ion-icon>
-                </div>
-                <div class="calendar__month" id="month"></div>
-                <div class="calendar__year" id="year"></div>
-                <div class="calendar__next btn-click-fx" id="next-month">
-                    <ion-icon class="calendar__nav-btn" name="caret-forward-outline"></ion-icon>
-                </div>
+                    <select name="NumberOfPeople" class="sb-select" id="search-box">
+                        <option>1</option>
+                        <option selected="selected">2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                    <button id="btn-submit" class="booking-btn">Book</button>
+                </form>
             </div>
+        
+            <div class="calendar calendar-none" >
+                <div class="calendar__info">
+                    <div class="calendar__prev btn-click-fx" id="prev-month">
+                        <ion-icon class="calendar__nav-btn" name="caret-back-outline"></ion-icon>
+                    </div>
+                    <div class="calendar__month" id="month"></div>
+                    <div class="calendar__year" id="year"></div>
+                    <div class="calendar__next btn-click-fx" id="next-month">
+                        <ion-icon class="calendar__nav-btn" name="caret-forward-outline"></ion-icon>
+                    </div>
+                </div>
 
-            <table id="dates">
-                <thead>
-                    <tr id="thtr"></tr>
-                </thead>
-                <tbody id="tb"></tbody>
-            </table> 
+                <table id="dates">
+                    <thead>
+                        <tr id="thtr"></tr>
+                    </thead>
+                    <tbody id="tb"></tbody>
+                </table> 
 
+            </div>
         </div>
-
         <div id="result"></div>
       
 

@@ -5,34 +5,60 @@ require([
     "register",
     "card",
     "calendar"], (view, todoApp, registerApp, cardApp, calendarApp) => {
-
-        const DOM_STRINGS = {
-            todo: 'todo',
-            register: 'register',
-            card: 'card',
-            calendar: 'calendar',
-            todoMobile: 'todo-mobile',
-            registerMobile: 'register-mobile',
-            cardMobile: 'card-mobile',
-            calendarMobile: 'calendar-mobile'
-        }
-
         const todoTemplate = view.getTemplate('todoapp')
         const registerTemplate = view.getTemplate('register')
         const cardTemplate = view.getTemplate('card')
         const calendarTemplate = view.getTemplate('calendar')
 
+        let open = false
+        let query = open ? '.nav-ul-open' : '.nav-ul-closed'
+        let el = document.querySelector(query)
 
-        document.getElementById(DOM_STRINGS.todo).addEventListener('click', () => todoApp.init(todoTemplate))
-        document.getElementById(DOM_STRINGS.todoMobile).addEventListener('click', () => todoApp.init(todoTemplate))
+        const toggle = (el) => {
+            if (open) {
+                el.classList.add('nav-ul-open')
+                el.classList.remove('nav-ul-closed')
+            } else {
+                el.classList.add('nav-ul-closed')
+                el.classList.remove('nav-ul-open')
+            }
+        }
 
-        document.getElementById(DOM_STRINGS.register).addEventListener('click', () => registerApp.init(registerTemplate))
-        document.getElementById(DOM_STRINGS.registerMobile).addEventListener('click', () => registerApp.init(registerTemplate))
+        const eventDelegator = (id) => {
+            switch (id) {
+                case 'todo':
+                case 'todo-mobile':
+                    todoApp.init(todoTemplate)
+                    break;
+                case 'register':
+                case 'register-mobile':
+                    registerApp.init(registerTemplate)
+                    break;
+                case 'card':
+                case 'card-mobile':
+                    cardApp.init(cardTemplate)
+                    break;
+                case 'calendar':
+                case 'calendar-mobile':
+                    calendarApp.init(calendarTemplate)
+                    break;
+            }
+        }
 
-        document.getElementById(DOM_STRINGS.card).addEventListener('click', () => cardApp.init(cardTemplate))
-        document.getElementById(DOM_STRINGS.cardMobile).addEventListener('click', () => cardApp.init(cardTemplate))
 
-        document.getElementById(DOM_STRINGS.calendar).addEventListener('click', () => calendarApp.init(calendarTemplate))
-        document.getElementById(DOM_STRINGS.calendarMobile).addEventListener('click', () => calendarApp.init(calendarTemplate))
+        document.querySelector('.menu-icon').addEventListener('click', () => {
+            open = !open
+            toggle(el)
+        })
+
+        window.addEventListener('mouseup', (e) => {
+            if (document.querySelector('.container-left-small-bottom').contains(e.target)) {
+                eventEmitter(e.target.id)
+                open = !open
+                toggle(el)
+            }
+        })
+
+        document.querySelector('.app-nav').addEventListener('click', (e) => eventDelegator(e.target.id))
 
     })
