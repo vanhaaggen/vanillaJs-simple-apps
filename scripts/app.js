@@ -53,7 +53,7 @@ require([
 
         window.addEventListener('mouseup', (e) => {
             if (document.querySelector('.container-left-small-bottom').contains(e.target)) {
-                eventEmitter(e.target.id)
+                eventDelegator(e.target.id)
                 open = !open
                 toggle(el)
             }

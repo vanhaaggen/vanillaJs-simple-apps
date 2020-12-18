@@ -127,6 +127,14 @@ define(() => {
 
         card: `
         <h1>Credit Card App</h1>
+        <div class="ctnr-card">
+            <div class="card">
+                <div class="card-front"></div>
+                <div class="card-back"></div>
+            </div>
+        </div>
+        <input id="card-num" type="text" placeholder="Card number"> 
+        <div class="card-data"></div>
         ${github('card')}
         `,
 
