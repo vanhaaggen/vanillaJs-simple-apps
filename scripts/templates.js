@@ -133,7 +133,12 @@ define(() => {
                 <div class="card-back"></div>
             </div>
         </div>
-        <input id="card-num" type="text" placeholder="Card number"> 
+        <form id="card-form">
+        <label class="card-label" for="card-num">Card number</label>
+        <input class="card-input" id="card-num" type="text" maxlength="17"> 
+        <label class="card-label" for="card-holder">Full name</label>
+        <input class="card-input" id="card-holder" type="text"> 
+        </form>
         <div class="card-data"></div>
         ${github('card')}
         `,

@@ -25,6 +25,13 @@ body {
     text-rendering: optimizeSpeed;
     line-height: 1.5; 
 }
+
+svg {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, 0);
+}
 /*-------------------------------*/
 :root{
     --background-js: #f5df4d; 
@@ -475,7 +482,6 @@ ion-icon{
 
 /*------------CARD APP------------*/
 /*--------------------------------*/
-
 .ctnr-card{
    background-color: transparent;
    width: 20.55rem;
@@ -508,6 +514,7 @@ ion-icon{
 
 .card-front{
     background-color: var(--color-main-elements);
+    background-image: url(./resources/card-shape-front.png);
 }
 
 .card-back{

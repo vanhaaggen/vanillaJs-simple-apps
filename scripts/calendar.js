@@ -341,7 +341,7 @@ const calendarUICtrl = (calendCtrl => {
             let tdArr = []
             let selectedDates = []
             let inRangeArr
-            //console.log(HTMLCollection)
+            console.log(HTMLCollection)
             Array.from(HTMLCollection).forEach((x, i) => {
                 if (x.classList[x.classList.length - 1] === `ui-calendar__date--${className}`) {
                     selectedDates.push(i)
@@ -349,7 +349,7 @@ const calendarUICtrl = (calendCtrl => {
                     if (eventData.click == 1) eventData.dateIdxIn = i
                     if (eventData.click == 2) eventData.dateIdxOut = i
                 }
-                if (x.computedRole === 'row') {
+                if (x.nodeName === 'TR') {
                     tdArr.push(0)
                 } else {
                     tdArr.push(i)
@@ -419,8 +419,8 @@ const calendarUICtrl = (calendCtrl => {
                     data.totalDays = data.totalNights + 1
                     break
             }
-
         },
+
         /**
          * It finds the greatest of two dates, and re-orders the data object if necessary.
          * **Disclaimer: Try not to use the window obj to store global data**

@@ -1,15 +1,78 @@
+const cardModelCtrl = (function () {
 
-const cardUICtrl = (function () {
-    const DOM_STRING = {
-        input: 'card-num',
-        cardFront: '.card-front',
-        cardBack: '.card-back'
+    const userData = {
+        cardNumber: '',
+        cardHolder: '',
+        month: '',
+        year: '',
+        bank: '',
+        scheme: '',
+        method: ''
     }
 
+    const BANK_ENTITIES = [
+        'banesto',
+        'bankia',
+        'caixa',
+        'bbva',
+        'sabadell',
+        'ing',
+        'santander',
+        'openbank',
+        'kutxabank',
+        'bankinter',
+    ]
+
+    return {
+        getData: () => {
+            return userData
+        },
+
+        cleanDataObject: (obj) => {
+            for (let val in obj) {
+                if (obj.hasOwnProperty(val)) {
+                    obj[val] = ''
+                }
+            }
+        },
+
+        normalizeBankName: (fiscalName) => {
+            let bank
+            let formatFiscName = fiscalName.toLowerCase()
+
+            BANK_ENTITIES.forEach(x => {
+                if (formatFiscName.indexOf(x) > -1) bank = x
+            })
+            return bank
+        }
+    }
+})()
+
+const cardUICtrl = (function (cardModel) {
+    const userData = cardModel.getData()
+
+    const DOM_STRING = {
+        input: 'card-num',
+        form: 'card-form',
+        cardFront: '.card-front',
+        cardBack: '.card-back',
+        svgCard: '.svg-card'
+    }
+
+    const isNavigator = (navigator) => {
+        const ua = window.navigator.userAgent
+        const nav = ua.indexOf(navigator)
+        if (nav > 0) {
+            return true
+        }
+
+    }
     const SVGtext = (x, y, fFamily, fSize, text, svgProp) => {
+        let isFireFox = isNavigator('Firefox/')
+
         return `
         <text 
-        transform="matrix(1 0 0 1 ${x} ${y})" 
+        transform="matrix(1 0 0 1 ${isFireFox ? x - 62 : x} ${y})" 
         font-family="${fFamily}" 
         font-size="${fSize}"
         ${svgProp}>
@@ -22,6 +85,8 @@ const cardUICtrl = (function () {
 
     const cardHolderName = name => SVGtext(24, 185, 'Arial-Bold', 14, name, 'letter-spacing="2"')
 
+    const paymentMethod = method => SVGtext(245.667, 28, 'Arial', 12, method)
+
     const cardNumber = (numbers, numOfChunks) => {
         const iterations = numbers.length / numOfChunks
         let chunksArr = []
@@ -33,7 +98,6 @@ const cardUICtrl = (function () {
             start += 4
             end += 4
         }
-
         let fFamily = 'Arial'
         let fSize = 25
         let arr = [
@@ -58,6 +122,27 @@ const cardUICtrl = (function () {
         return arr
     }
 
+    const brandLogo = (scheme) => {
+        const path = `../vanilla/resources/card/${scheme}.png`
+        let isVisa = scheme === 'visa'
+        const size = {
+            height: isVisa ? 30 : 50,
+            width: isVisa ? 69 : 89,
+            y: isVisa ? 170 : 150
+        }
+        return `
+        <g 
+        transform="matrix(1 0 0 1 240 ${size.y})"
+        >
+        <image 
+        href="${path}"
+        height= "${size.height}"
+        width="${size.width}"/>
+        </g>
+        `
+    }
+
+
     return {
         getDomString: () => {
             return DOM_STRING
@@ -68,67 +153,97 @@ const cardUICtrl = (function () {
             return hydrate
         },
 
-        cardFront: (cardNumbers) => {
+        displayCard: (bank = '', month = '', year = '', number = '', cardHolder = '', scheme = '', type = '') => {
             const parentEl = document.querySelector(DOM_STRING.cardFront)
             const SVG = `
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="328.8px"
-         height="211.52px" viewBox="0 0 328.8 211.52" enable-background="new 0 0 328.8 211.52" xml:space="preserve">
+            <svg class="svg-card" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="328.8px"
+             height="211.52px" viewBox="0 0 328.8 211.52" enable-background="new 0 0 328.8 211.52" xml:space="preserve">
                 <g id="chip">
-                    <g>
-                        <path fill="#CBBAF7" d="M84,84c0-3.866-3.134-7-7-7H46c-3.866,0-7,3.134-7,7v18c0,3.866,3.134,7,7,7h31c3.866,0,7-3.134,7-7V84z"
-                            />
-                        <path fill="none" stroke="#000000" stroke-linejoin="round" stroke-miterlimit="10" d="M83.5,83.5c0-3.866-3.134-7-7-7h-31
-                            c-3.866,0-7,3.134-7,7v18c0,3.866,3.134,7,7,7h31c3.866,0,7-3.134,7-7V83.5z"/>
+                        <path fill="#adabab" d="M84,84c0-3.866-3.134-7-7-7H46c-3.866,0-7,3.134-7,7v18c0,3.866,3.134,7,7,7h31c3.866,0,7-3.134,7-7V84z"/>
+                        <path fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-miterlimit="10" d="M83.5,83.5c0-3.866-3.134-7-7-7h-31
+                        c-3.866,0-7,3.134-7,7v18c0,3.866,3.134,7,7,7h31c3.866,0,7-3.134,7-7V83.5z"/>
                     </g>
-                    <path fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" d="M26.484,78c4.931,8.541,4.931,19.063,0,27.604
-                         M20.412,81.036c3.846,6.662,3.846,14.87,0,21.531 M14.615,83.824c2.781,4.868,2.781,10.866,0,15.734 M8.818,86.833
-                        c2.009,3.041,2.009,6.896,0,9.938"/>
+
+                    <path fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" d="M22.624,81.897c3.789,6.561,3.789,14.644,0,21.206
+                    M17.959,84.229c2.955,5.118,2.955,11.423,0,16.542 M13.505,86.371c2.137,3.741,2.137,8.348,0,12.088 M9.052,88.683
+                   c1.544,2.335,1.544,5.299,0,7.634"/>
                 </g>
-                <g id="brand">
-                    <g transform="matrix(0.762 0 0 1 257 174.1084)">${'brandImage'}</g>
-                </g>
-                ${cardHolderName('CHRISTIAN M. HAAG')}
-                ${expiresEnd(10, 23)}
-                ${cardNumber(cardNumbers, 4)}
-                ${bankName('Banco Sabadell')}
-                </svg>
-                        `
+                ${bankName(bank)}
+                ${paymentMethod(type)}
+                ${cardNumber(number, 4)}
+                ${expiresEnd(month, year)}
+                ${cardHolderName(cardHolder)}
+                ${scheme ? brandLogo(scheme, 20, 59) : ''}
+            </svg>`
+
             parentEl.innerHTML = ''
             parentEl.insertAdjacentHTML('beforeend', SVG)
         }
     }
 
 
-})()
+})(cardModelCtrl)
 
 
 define(() => {
     const DOM = cardUICtrl.getDomString()
+    const userData = cardModelCtrl.getData()
 
-    const fetchApi = (e) => {
-        // if (e.length === 6) {
-        //     const requestOptions = {
-        //         method: 'GET'
-        //     }
+    const fetchApi = async (e) => {
+        if (e.length === 6) {
+            const requestOptions = {
+                method: 'GET'
+            }
+            try {
+                const response = await fetch(`https://lookup.binlist.net/${e}`, requestOptions)
+                const result = await response.json()
 
-        //     fetch(`https://lookup.binlist.net/${e}`, requestOptions)
-        //         .then(response => response.json())
-        //         .then(result => console.log(result))
-        //         .catch(error => console.log('error', error));
-        // }
-        cardUICtrl.cardFront(e)
+                userData.bank = cardModelCtrl.normalizeBankName(result.bank.name) || result.bank.name
+                userData.brand = result.brand
+                userData.scheme = result.brand === 'maestro' ? 'maestro' : result.scheme
+
+                console.log(result)
+            } catch (error) {
+                return console.log('error', error)
+            }
+        }
 
     }
 
+    const eDelegator = async (e) => {
+        switch (e.target.id) {
+            case 'card-num':
+                userData.cardNumber = e.target.value
+                await fetchApi(e.target.value)
+                flag = true
+                break;
+            case 'card-holder':
+                userData.cardHolder = e.target.value
 
+        }
+
+        cardUICtrl.displayCard(
+            userData.bank,
+            userData.month,
+            userData.year,
+            userData.cardNumber,
+            userData.cardHolder,
+            userData.scheme,
+            userData.type
+        )
+
+    }
     const setupEventListeners = () => {
-        document.getElementById(DOM.input).addEventListener('input', (e) => fetchApi(e.target.value))
+        document.getElementById(DOM.form).addEventListener('input', (e) => eDelegator(e))
+
     }
 
     return {
         init: (view) => {
             document.getElementById('root').innerHTML = ""
+            cardModelCtrl.cleanDataObject(userData)
             cardUICtrl.loadView(view)
+            cardUICtrl.displayCard()
             setupEventListeners()
         },
     }
