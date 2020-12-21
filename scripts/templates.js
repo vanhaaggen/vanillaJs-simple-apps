@@ -134,10 +134,18 @@ define(() => {
             </div>
         </div>
         <form id="card-form">
-        <label class="card-label" for="card-num">Card number</label>
-        <input class="card-input" id="card-num" type="text" maxlength="17"> 
         <label class="card-label" for="card-holder">Full name</label>
-        <input class="card-input" id="card-holder" type="text"> 
+        <input class="card-input" id="card-holder" type="text" required>
+        <label class="card-label" for="card-num">Card number</label>
+        <input class="card-input" id="card-num" type="text" maxlength="17" required> 
+        <div class="card-expiration">
+            <label class="card-lable" for="card-month">Date</lable>
+            <select id="card-month"></select>
+            <label class="card-lable" for="card-year">Year</lable>
+            <select id="card-year"></select> 
+        </div> 
+        <lable class="card-lable" for="card-cvd">CVD</lable>
+        <input class="card-input" id="card-cvd" type="number" required>
         </form>
         <div class="card-data"></div>
         ${github('card')}

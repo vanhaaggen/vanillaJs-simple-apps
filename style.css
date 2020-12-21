@@ -482,6 +482,13 @@ ion-icon{
 
 /*------------CARD APP------------*/
 /*--------------------------------*/
+#card-form{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    max-width: 25rem;
+    min-width: 18.75rem
+}
 .ctnr-card{
    background-color: transparent;
    width: 20.55rem;
@@ -499,8 +506,12 @@ ion-icon{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2)
 }
 
-.ctnr-card:hover .card{
+/* .ctnr-card:hover .card{
     transform: rotateY(180deg)
+} */
+
+.turn-card{
+    transform: rotateY(180deg) 
 }
 
 .card-front, .card-back{

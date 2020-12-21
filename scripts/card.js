@@ -5,6 +5,7 @@ const cardModelCtrl = (function () {
         cardHolder: '',
         month: '',
         year: '',
+        cvd: '',
         bank: '',
         scheme: '',
         method: ''
@@ -48,15 +49,17 @@ const cardModelCtrl = (function () {
     }
 })()
 
-const cardUICtrl = (function (cardModel) {
-    const userData = cardModel.getData()
-
+const cardUICtrl = (function () {
     const DOM_STRING = {
+        card: '.card',
         input: 'card-num',
         form: 'card-form',
         cardFront: '.card-front',
         cardBack: '.card-back',
-        svgCard: '.svg-card'
+        svgCard: '.svg-card',
+        cardMonth: 'card-month',
+        cardYear: 'card-year',
+        cardCVD: 'card-cvd'
     }
 
     const isNavigator = (navigator) => {
@@ -142,6 +145,27 @@ const cardUICtrl = (function (cardModel) {
         `
     }
 
+    const loadMonthOptions = (numMonth) => {
+        let monthElement = document.getElementById(DOM_STRING.cardMonth)
+
+        for (let i = 1; i <= numMonth; i++) {
+            let newElement = `<option value="${i}">${i}</option>`
+            monthElement.insertAdjacentHTML('beforeend', newElement)
+        }
+
+    }
+
+    const loadYearOptions = (currentYear, years) => {
+        let yearElement = document.getElementById(DOM_STRING.cardYear)
+
+        for (let i = 0; i <= years; i++) {
+            let year = currentYear + i
+            let newElement = `<option value="${year}">${year}</option>`
+            yearElement.insertAdjacentHTML('beforeend', newElement)
+        }
+
+    }
+
 
     return {
         getDomString: () => {
@@ -153,7 +177,17 @@ const cardUICtrl = (function (cardModel) {
             return hydrate
         },
 
-        displayCard: (bank = '', month = '', year = '', number = '', cardHolder = '', scheme = '', type = '') => {
+        loadOptions: (numMonth, currYear, numYears) => {
+            loadMonthOptions(numMonth)
+            loadYearOptions(currYear, numYears)
+        },
+
+        turnCard: () => {
+            const element = document.querySelector(DOM_STRING.card)
+            element.classList.toggle('turn-card')
+        },
+
+        displayCard: (bank = '', month = '', year = '', number = '', cardHolder = '', scheme = '', type = '', cvd = '') => {
             const parentEl = document.querySelector(DOM_STRING.cardFront)
             const SVG = `
             <svg class="svg-card" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="328.8px"
@@ -181,31 +215,32 @@ const cardUICtrl = (function (cardModel) {
         }
     }
 
-
-})(cardModelCtrl)
+})()
 
 
 define(() => {
     const DOM = cardUICtrl.getDomString()
     const userData = cardModelCtrl.getData()
+    const date = new Date()
+    const currentYear = date.getFullYear()
 
     const fetchApi = async (e) => {
         if (e.length === 6) {
             const requestOptions = {
                 method: 'GET'
             }
-            try {
-                const response = await fetch(`https://lookup.binlist.net/${e}`, requestOptions)
-                const result = await response.json()
+            // try {
+            //     const response = await fetch(`https://lookup.binlist.net/${e}`, requestOptions)
+            //     const result = await response.json()
 
-                userData.bank = cardModelCtrl.normalizeBankName(result.bank.name) || result.bank.name
-                userData.brand = result.brand
-                userData.scheme = result.brand === 'maestro' ? 'maestro' : result.scheme
+            //     userData.bank = cardModelCtrl.normalizeBankName(result.bank.name) || result.bank.name
+            //     userData.brand = result.brand
+            //     userData.scheme = result.brand === 'maestro' ? 'maestro' : result.scheme
 
-                console.log(result)
-            } catch (error) {
-                return console.log('error', error)
-            }
+            //     console.log(result)
+            // } catch (error) {
+            //     return console.log('error', error)
+            // }
         }
 
     }
@@ -218,8 +253,16 @@ define(() => {
                 flag = true
                 break;
             case 'card-holder':
-                userData.cardHolder = e.target.value
-
+                userData.cardHolder = e.target.value.toUpperCase()
+                break;
+            case 'card-month':
+                userData.month = e.target.value
+                break
+            case 'card-year':
+                userData.year = e.target.value
+                break
+            case 'card-cvd':
+                userData.cvd = e.target.value
         }
 
         cardUICtrl.displayCard(
@@ -229,12 +272,17 @@ define(() => {
             userData.cardNumber,
             userData.cardHolder,
             userData.scheme,
-            userData.type
+            userData.type,
+            userData.cvd,
         )
-
     }
+
     const setupEventListeners = () => {
+
         document.getElementById(DOM.form).addEventListener('input', (e) => eDelegator(e))
+
+        document.getElementById(DOM.cardCVD).addEventListener('focusin', () => cardUICtrl.turnCard())
+        document.getElementById(DOM.cardCVD).addEventListener('focusout', () => cardUICtrl.turnCard())
 
     }
 
@@ -243,6 +291,7 @@ define(() => {
             document.getElementById('root').innerHTML = ""
             cardModelCtrl.cleanDataObject(userData)
             cardUICtrl.loadView(view)
+            cardUICtrl.loadOptions(12, currentYear, 20)
             cardUICtrl.displayCard()
             setupEventListeners()
         },
