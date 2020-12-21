@@ -229,18 +229,18 @@ define(() => {
             const requestOptions = {
                 method: 'GET'
             }
-            // try {
-            //     const response = await fetch(`https://lookup.binlist.net/${e}`, requestOptions)
-            //     const result = await response.json()
+            try {
+                const response = await fetch(`https://lookup.binlist.net/${e}`, requestOptions)
+                const result = await response.json()
 
-            //     userData.bank = cardModelCtrl.normalizeBankName(result.bank.name) || result.bank.name
-            //     userData.brand = result.brand
-            //     userData.scheme = result.brand === 'maestro' ? 'maestro' : result.scheme
+                userData.bank = cardModelCtrl.normalizeBankName(result.bank.name) || result.bank.name
+                userData.brand = result.brand
+                userData.scheme = result.brand === 'maestro' ? 'maestro' : result.scheme
 
-            //     console.log(result)
-            // } catch (error) {
-            //     return console.log('error', error)
-            // }
+                console.log(result)
+            } catch (error) {
+                return console.log('error', error)
+            }
         }
 
     }
